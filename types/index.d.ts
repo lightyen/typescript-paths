@@ -1,2 +1,2 @@
 export * from "./paths";
-export { register } from "./register";
+export * from "./register";

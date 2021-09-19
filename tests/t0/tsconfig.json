@@ -1,0 +1,19 @@
+{
+  "extends": "../tsconfig.base",
+  "compilerOptions": {
+    "allowJs": true,
+    "noEmit": true,
+    "module": "esnext",
+    "moduleResolution": "node",
+    "jsx": "preserve",
+    "noImplicitAny": false,
+    "paths": {
+      "~/*": ["./*"],
+      "@xxx/*/xxx": ["./xyz/*/xyz"],
+      "@xxx/*": ["./abc/*"],
+      "#m/*": ["./abc/*", "./xyz/*/xyz"],
+      "roll": ["../../node_modules/rollup"]
+    }
+  },
+  "include": ["**/*"]
+}

@@ -45,7 +45,11 @@ export declare function getTsConfig({ tsConfigPath, host, colors, }: {
     tsConfigPath: string;
     host?: ts.ParseConfigHost;
     colors?: boolean;
-}): ts.CompilerOptions;
+}): {
+    compilerOptions: ts.CompilerOptions;
+    fileNames: string[];
+    errors: ts.Diagnostic[];
+};
 export declare function createMappings({ paths, respectCoreModule, logLevel, colors, }: {
     paths: ts.MapLike<string[]>;
     respectCoreModule?: boolean;
@@ -55,7 +59,6 @@ export declare function createMappings({ paths, respectCoreModule, logLevel, col
 export declare function isPatternMatch(prefix: string, suffix: string, candidate: string): boolean;
 export declare function findMatch(moduleName: string, mappings: Mapping[]): Mapping | undefined;
 export declare function containNodeModules(str: string): boolean;
-export declare const dtsExcludedHost: ts.ModuleResolutionHost;
 export declare function resolveModuleName({ mappings, request, importer, compilerOptions, host, falllback, }: {
     compilerOptions: ts.CompilerOptions;
     mappings: Mapping[];

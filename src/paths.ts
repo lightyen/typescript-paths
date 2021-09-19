@@ -38,7 +38,7 @@ export const coreModules = {
 	zlib: "provides compression functionality",
 }
 
-export interface Mapping {
+interface Mapping {
 	pattern: string
 	prefix: string
 	suffix: string
@@ -59,17 +59,21 @@ export function getTsConfig({
 	if (error) {
 		throw new Error(formatLog("error", error.messageText, colors))
 	}
-	let { options: compilerOptions } = ts.parseJsonConfigFileContent(config, host, path.dirname(tsConfigPath))
-	if (!compilerOptions) {
-		throw new Error(formatLog("error", "'compilerOptions' is gone.", colors))
-	}
+
+	let {
+		options: compilerOptions,
+		errors,
+		fileNames,
+	} = ts.parseJsonConfigFileContent(config, host, path.resolve(path.dirname(tsConfigPath)))
+
 	if (compilerOptions.baseUrl == undefined) {
 		compilerOptions.baseUrl = path.dirname(tsConfigPath)
 	}
+
 	if (!compilerOptions.paths || compilerOptions.paths instanceof Array) {
 		compilerOptions.paths = {}
 	}
-	return compilerOptions
+	return { compilerOptions, fileNames: fileNames.map(path.normalize), errors }
 }
 
 export function createMappings({
@@ -102,7 +106,9 @@ export function createMappings({
 			for (const key in coreModules) {
 				if (pattern.startsWith(key)) {
 					if (logLevel != "none") {
-						console.warn(formatLog("warn", `path pattern core modules like '${pattern}' is ignored.`, colors))
+						console.warn(
+							formatLog("warn", `path pattern core modules like '${pattern}' is ignored.`, colors),
+						)
 						console.log(formatLog("info", `(${key}) ${coreModules[key]}`, colors))
 					}
 					continue
@@ -115,7 +121,8 @@ export function createMappings({
 					console.warn(
 						formatLog(
 							"warn",
-							`Substitution '${target}' in pattern '${pattern}' can have at most one '*' character.`, colors,
+							`Substitution '${target}' in pattern '${pattern}' can have at most one '*' character.`,
+							colors,
 						),
 					)
 				return false
@@ -181,14 +188,6 @@ export function findMatch(moduleName: string, mappings: Mapping[]): Mapping | un
 
 export function containNodeModules(str: string) {
 	return str.indexOf(path.sep + "node_modules" + path.sep) !== -1
-}
-
-export const dtsExcludedHost: ts.ModuleResolutionHost = {
-	...ts.sys,
-	fileExists(filename) {
-		if (filename.endsWith(ts.Extension.Dts)) return false
-		return ts.sys.fileExists(filename)
-	},
 }
 
 export function resolveModuleName({
