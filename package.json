@@ -42,7 +42,7 @@
   },
   "files": [
     "dist",
-    "typings",
+    "types",
     "LICENSE",
     "README.md"
   ]
