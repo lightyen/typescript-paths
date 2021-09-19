@@ -38,7 +38,7 @@ export const coreModules = {
 	zlib: "provides compression functionality",
 }
 
-interface Mapping {
+export interface Mapping {
 	pattern: string
 	prefix: string
 	suffix: string
@@ -218,8 +218,7 @@ export function resolveModuleName({
 		const moduleName = path.resolve(compilerOptions.baseUrl!, updated)
 		const result = ts.resolveModuleName(moduleName, importer, compilerOptions, host)
 		if (result?.resolvedModule) {
-			const resolvedModuleName = path.normalize(result.resolvedModule.resolvedFileName)
-			return resolvedModuleName
+			return path.normalize(result.resolvedModule.resolvedFileName)
 		}
 		if (falllback?.(moduleName)) {
 			return moduleName

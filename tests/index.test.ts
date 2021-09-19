@@ -1,4 +1,4 @@
-import { createMappings, dtsExcludedHost, findMatch, getTsConfig, resolveModuleName } from "../src/paths"
+import { createMappings, dtsExcludedHost, findMatch, getTsConfig, resolveModuleName, createHandler } from "../src"
 import path from "path"
 
 test("read config", async () => {
@@ -71,40 +71,17 @@ test("path mappings", async () => {
 })
 
 test("resolving paths", async () => {
-	let compilerOptions = getTsConfig({ tsConfigPath: path.resolve(__dirname, "tsconfig.json") })
-	let mappings = createMappings({ paths: compilerOptions.paths! })
-	const opts: Parameters<typeof resolveModuleName>[0] = {
-		mappings,
-		compilerOptions,
-		host: dtsExcludedHost,
-		importer: path.resolve(__dirname, "t0", "index.ts"),
-		request: "",
-	}
+	const handler = createHandler({ tsConfigPath: path.resolve(__dirname, "tsconfig.json") })
+	expect(handler).toBeTruthy()
 
-	opts.request = "~/hello"
-	expect(resolveModuleName(opts)).toEqual(path.resolve(__dirname, "t0", "hello.ts"))
-
-	opts.request = "~/qqq/hello"
-	expect(resolveModuleName(opts)).toEqual(require.resolve(path.join(__dirname, "t0", "qqq/hello.js")))
-
-	opts.request = "@xxx/abc/xxx"
-	expect(resolveModuleName(opts)).toEqual(path.resolve(__dirname, "t0", "xyz/abc/xyz.ts"))
-
-	opts.request = "@xxx/fff"
-	expect(resolveModuleName(opts)).toEqual(path.resolve(__dirname, "t0", "abc/fff.js"))
-
-	opts.request = "#m/abc"
-	expect(resolveModuleName(opts)).toEqual(path.resolve(__dirname, "t0", "xyz/abc/xyz.ts"))
-
-	opts.request = "#m/fff"
-	expect(resolveModuleName(opts)).toEqual(path.resolve(__dirname, "t0", "abc/fff.js"))
-
-	opts.request = "roll"
-	expect(resolveModuleName(opts)).toEqual(require.resolve("rollup"))
-
-	opts.request = "./t0/abc/App"
-	expect(resolveModuleName(opts)).toBeFalsy()
-
-	opts.request = "rollup"
-	expect(resolveModuleName(opts)).toBeFalsy()
+	const resolve = (request: string) => handler!(request, path.resolve(__dirname, "t0", "index.ts"))
+	expect(resolve("~/hello")).toEqual(path.resolve(__dirname, "t0", "hello.ts"))
+	expect(resolve("~/qqq/hello")).toEqual(require.resolve(path.join(__dirname, "t0", "qqq/hello.js")))
+	expect(resolve("@xxx/abc/xxx")).toEqual(path.resolve(__dirname, "t0", "xyz/abc/xyz.ts"))
+	expect(resolve("@xxx/fff")).toEqual(path.resolve(__dirname, "t0", "abc/fff.js"))
+	expect(resolve("#m/abc")).toEqual(path.resolve(__dirname, "t0", "xyz/abc/xyz.ts"))
+	expect(resolve("#m/fff")).toEqual(path.resolve(__dirname, "t0", "abc/fff.js"))
+	expect(resolve("roll")).toEqual(require.resolve("rollup"))
+	expect(resolve("./t0/abc/App")).toBeFalsy()
+	expect(resolve("rollup")).toBeFalsy()
 })

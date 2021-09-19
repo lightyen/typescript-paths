@@ -12,5 +12,6 @@
       "#m/*": ["./t0/abc/*", "./t0/xyz/*/xyz"],
       "roll": ["../node_modules/rollup"]
     }
-  }
+  },
+  "include": ["**/*.ts"]
 }
