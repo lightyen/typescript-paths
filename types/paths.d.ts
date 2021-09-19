@@ -51,11 +51,12 @@ export declare function isPatternMatch(prefix: string, suffix: string, candidate
 export declare function findMatch(moduleName: string, mappings: Mapping[]): Mapping | undefined;
 export declare function containNodeModules(str: string): boolean;
 export declare const dtsExcludedHost: ts.ModuleResolutionHost;
-export declare function resolveModuleName({ mappings, request, importer, compilerOptions, host, }: {
+export declare function resolveModuleName({ mappings, request, importer, compilerOptions, host, falllback, }: {
     compilerOptions: ts.CompilerOptions;
     mappings: Mapping[];
     request: string;
     importer: string;
     host: ts.ModuleResolutionHost;
+    falllback?: (moduleName: string) => string | undefined;
 }): string | undefined;
 export {};

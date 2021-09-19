@@ -11,8 +11,6 @@ Resolving tsconfig paths in runtime
 npm i typescript-paths
 ```
 
-rollup.config.js
-
 ```js
 const { register } = require("typescript-paths")
 register()
@@ -33,11 +31,8 @@ Example tsconfig.json
 Then you can import alias instead of annoying path
 
 ```js
-// import App from "../../../../App"
-import App from "~/App"
-
-...
-
+// const App = require("../../../../App")
+const App = require("~/App")
 ```
 
 ## Options
