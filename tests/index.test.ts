@@ -1,9 +1,8 @@
 import { createMappings, dtsExcludedHost, findMatch, getTsConfig, resolveModuleName } from "../src/paths"
-import ts from "typescript"
 import path from "path"
 
 test("read config", async () => {
-	const compilerOptions = getTsConfig(path.resolve(__dirname, "bad.tsconfig.json"), ts.sys)
+	const compilerOptions = getTsConfig({ tsConfigPath: path.resolve(__dirname, "bad.tsconfig.json") })
 	expect(compilerOptions).toBeTruthy()
 	expect(compilerOptions.baseUrl).toBeTruthy()
 	expect(compilerOptions.paths).toBeTruthy()
@@ -72,7 +71,7 @@ test("path mappings", async () => {
 })
 
 test("resolving paths", async () => {
-	let compilerOptions = getTsConfig(path.resolve(__dirname, "tsconfig.json"), ts.sys)
+	let compilerOptions = getTsConfig({ tsConfigPath: path.resolve(__dirname, "tsconfig.json") })
 	let mappings = createMappings({ paths: compilerOptions.paths! })
 	const opts: Parameters<typeof resolveModuleName>[0] = {
 		mappings,

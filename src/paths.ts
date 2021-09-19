@@ -46,14 +46,22 @@ interface Mapping {
 	targets: string[]
 }
 
-export function getTsConfig(tsConfigPath: string, host: ts.ParseConfigHost) {
+export function getTsConfig({
+	tsConfigPath,
+	host = ts.sys,
+	colors = false,
+}: {
+	tsConfigPath: string
+	host?: ts.ParseConfigHost
+	colors?: boolean
+}) {
 	const { error, config } = ts.readConfigFile(tsConfigPath, host.readFile)
 	if (error) {
-		throw new Error(formatLog("error", error.messageText))
+		throw new Error(formatLog("error", error.messageText, colors))
 	}
 	let { options: compilerOptions } = ts.parseJsonConfigFileContent(config, host, path.dirname(tsConfigPath))
 	if (!compilerOptions) {
-		throw new Error(formatLog("error", "'compilerOptions' is gone."))
+		throw new Error(formatLog("error", "'compilerOptions' is gone.", colors))
 	}
 	if (compilerOptions.baseUrl == undefined) {
 		compilerOptions.baseUrl = path.dirname(tsConfigPath)
@@ -68,10 +76,12 @@ export function createMappings({
 	paths,
 	respectCoreModule = true,
 	logLevel = "none",
+	colors = false,
 }: {
 	paths: ts.MapLike<string[]>
 	respectCoreModule?: boolean
 	logLevel?: "warn" | "debug" | "none"
+	colors?: boolean
 }): Mapping[] {
 	const countWildcard = (value: string) => value.match(/\*/g)?.length ?? 0
 	const valid = (value: string) => /(\*|\/\*|\/\*\/)/.test(value)
@@ -80,20 +90,20 @@ export function createMappings({
 	for (const pattern of Object.keys(paths)) {
 		if (countWildcard(pattern) > 1) {
 			logLevel != "none" &&
-				console.warn(formatLog("warn", `Pattern '${pattern}' can have at most one '*' character.`))
+				console.warn(formatLog("warn", `Pattern '${pattern}' can have at most one '*' character.`, colors))
 			continue
 		}
 		const wildcard = pattern.indexOf("*")
 		if (wildcard !== -1 && !valid(pattern)) {
-			logLevel != "none" && console.warn(formatLog("warn", `path pattern '${pattern}' is not valid.`))
+			logLevel != "none" && console.warn(formatLog("warn", `path pattern '${pattern}' is not valid.`, colors))
 			continue
 		}
 		if (respectCoreModule) {
 			for (const key in coreModules) {
 				if (pattern.startsWith(key)) {
 					if (logLevel != "none") {
-						console.warn(formatLog("warn", `path pattern core modules like '${pattern}' is ignored.`))
-						console.log(formatLog("info", `(${key}) ${coreModules[key]}`))
+						console.warn(formatLog("warn", `path pattern core modules like '${pattern}' is ignored.`, colors))
+						console.log(formatLog("info", `(${key}) ${coreModules[key]}`, colors))
 					}
 					continue
 				}
@@ -105,18 +115,18 @@ export function createMappings({
 					console.warn(
 						formatLog(
 							"warn",
-							`Substitution '${target}' in pattern '${pattern}' can have at most one '*' character.`,
+							`Substitution '${target}' in pattern '${pattern}' can have at most one '*' character.`, colors,
 						),
 					)
 				return false
 			}
 			const wildcard = target.indexOf("*")
 			if (wildcard !== -1 && !valid(target)) {
-				logLevel != "none" && console.warn(formatLog("warn", `target pattern '${target}' is not valid`))
+				logLevel != "none" && console.warn(formatLog("warn", `target pattern '${target}' is not valid`, colors))
 				return false
 			}
 			if (target.indexOf("@types") !== -1 || target.endsWith(".d.ts")) {
-				logLevel != "none" && console.warn(formatLog("warn", `type defined ${target} is ignored.`))
+				logLevel != "none" && console.warn(formatLog("warn", `type defined ${target} is ignored.`, colors))
 				return false
 			}
 			return true
@@ -139,7 +149,7 @@ export function createMappings({
 
 	if (logLevel === "debug") {
 		for (const mapping of mappings) {
-			console.log(formatLog("info", `pattern: '${mapping.pattern}' targets: '${mapping.targets}'`))
+			console.log(formatLog("info", `pattern: '${mapping.pattern}' targets: '${mapping.targets}'`, colors))
 		}
 	}
 	return mappings

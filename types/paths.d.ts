@@ -41,11 +41,16 @@ interface Mapping {
     wildcard: boolean;
     targets: string[];
 }
-export declare function getTsConfig(tsConfigPath: string, host: ts.ParseConfigHost): ts.CompilerOptions;
-export declare function createMappings({ paths, respectCoreModule, logLevel, }: {
+export declare function getTsConfig({ tsConfigPath, host, colors, }: {
+    tsConfigPath: string;
+    host?: ts.ParseConfigHost;
+    colors?: boolean;
+}): ts.CompilerOptions;
+export declare function createMappings({ paths, respectCoreModule, logLevel, colors, }: {
     paths: ts.MapLike<string[]>;
     respectCoreModule?: boolean;
     logLevel?: "warn" | "debug" | "none";
+    colors?: boolean;
 }): Mapping[];
 export declare function isPatternMatch(prefix: string, suffix: string, candidate: string): boolean;
 export declare function findMatch(moduleName: string, mappings: Mapping[]): Mapping | undefined;

@@ -7,22 +7,24 @@ interface Options {
 	tsConfigPath?: string
 	logLevel?: "warn" | "debug" | "none"
 	respectCoreModule?: boolean
+	colors?: boolean
 }
 
 export function register({
 	tsConfigPath = process.env["TS_NODE_PROJECT"] || ts.findConfigFile(".", ts.sys.fileExists) || "tsconfig.json",
 	respectCoreModule = true,
 	logLevel = "warn",
+	colors = true,
 }: Options = {}): () => void {
 	let compilerOptions: ts.CompilerOptions
 	try {
-		compilerOptions = getTsConfig(tsConfigPath, ts.sys)
+		compilerOptions = getTsConfig({ tsConfigPath, host: ts.sys, colors })
 	} catch (err) {
-		console.error(formatLog("error", err))
+		console.error(formatLog("error", err, colors))
 		return () => {}
 	}
 
-	const mappings = createMappings({ logLevel, respectCoreModule, paths: compilerOptions.paths! })
+	const mappings = createMappings({ logLevel, respectCoreModule, paths: compilerOptions.paths!, colors })
 
 	const originalResolveFilename = Module["_resolveFilename"]
 
@@ -36,7 +38,7 @@ export function register({
 		})
 		if (moduleName) {
 			if (logLevel === "debug") {
-				console.log(formatLog("info", `${request} -> ${moduleName}`))
+				console.log(formatLog("info", `${request} -> ${moduleName}`, colors))
 			}
 			return originalResolveFilename.apply(this, [moduleName, parent, ...args])
 		}
