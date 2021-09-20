@@ -2,7 +2,7 @@
   "compilerOptions": {
     "strict": true,
     "isolatedModules": true,
-    "esModuleInterop": true,
+    "esModuleInterop": true
   },
   "include": ["index.test.ts"]
 }

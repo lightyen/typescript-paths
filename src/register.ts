@@ -85,7 +85,6 @@ export function createHandler({
 		}, undefined)
 }
 
-
 export function register({
 	tsConfigPath = fromTS_NODE_PROJECT() || ts.findConfigFile(".", ts.sys.fileExists) || "tsconfig.json",
 	respectCoreModule = true,
