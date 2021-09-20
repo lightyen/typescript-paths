@@ -9,6 +9,7 @@ interface Options {
 	logLevel?: "warn" | "debug" | "none"
 	respectCoreModule?: boolean
 	colors?: boolean
+	strict?: boolean
 }
 
 interface OptionFallback {
@@ -27,6 +28,7 @@ interface Service {
 	compilerOptions: ts.CompilerOptions
 	fileNames: string[]
 	mappings: ReturnType<typeof createMappings>
+	cache: Map<string, boolean>
 }
 
 export function createHandler({
@@ -34,6 +36,7 @@ export function createHandler({
 	respectCoreModule = true,
 	logLevel = "warn",
 	colors = true,
+	strict = false,
 	falllback,
 }: Options & OptionFallback = {}) {
 	const services: Service[] = []
@@ -50,6 +53,7 @@ export function createHandler({
 				compilerOptions,
 				fileNames,
 				mappings: createMappings({ logLevel, respectCoreModule, paths: compilerOptions.paths!, colors }),
+				cache: new Map(),
 			})
 		}
 	} catch (err) {
@@ -70,9 +74,18 @@ export function createHandler({
 			if (result) {
 				return result
 			}
-			const { compilerOptions, fileNames, mappings } = srv
-			if (fileNames.indexOf(importer) === -1) {
-				return undefined
+			const { compilerOptions, cache, fileNames, mappings } = srv
+			if (strict) {
+				const exist = cache.get(importer)
+				if (exist !== undefined) {
+					cache.delete(request)
+					cache.set(request, exist)
+					if (!exist) return undefined
+				} else if (fileNames.indexOf(importer) === -1) {
+					if (cache.size === 1 << 8) cache.delete(cache.keys().next().value)
+					cache.set(importer, false)
+					return undefined
+				}
 			}
 			return resolveModuleName({
 				compilerOptions,
@@ -90,9 +103,10 @@ export function register({
 	respectCoreModule = true,
 	logLevel = "warn",
 	colors = true,
+	strict = false,
 	falllback,
 }: Options & OptionFallback = {}): () => void {
-	const handler = createHandler({ tsConfigPath, respectCoreModule, logLevel, colors, falllback })
+	const handler = createHandler({ tsConfigPath, respectCoreModule, logLevel, colors, strict, falllback })
 	if (!handler) {
 		return () => {}
 	}

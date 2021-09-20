@@ -54,13 +54,15 @@ Log level when the plugin is running.
 
 The handler to handle unusual module name.
 
-## respectCoreModule _(boolean) (default: true)_
+## strict _(boolean) (default: false)_
 
-Whether let patterns match the NodeJS core modules or not.
+Check whether each filename is including by tsconfig or not.
 
 ## color _(boolean) (default: true)_
 
 Colorful ouput.
+
+## respectCoreModule _(boolean) (default: true)_
 
 ## reference
 
