@@ -8,7 +8,7 @@
 Resolving tsconfig paths in runtime
 
 ```sh
-npm i typescript-paths
+npm install typescript-paths
 ```
 
 ```js
@@ -37,9 +37,9 @@ const App = require("~/App")
 
 ## Options
 
-### tsConfigPath _(string)_
+### tsConfigPath _(string | string[])_
 
-Specify set where your TypeScript configuration file.
+Specify the path where your TypeScript configuration file.
 
 If not set:
 
@@ -49,6 +49,18 @@ If not set:
 ### logLevel _("warn" | "debug" | "none") (default: "warn")_
 
 Log level when the plugin is running.
+
+### fallback _(function (string): string | undefined)_
+
+The handler to handle unusual module name.
+
+## respectCoreModule _(boolean) (default: true)_
+
+Whether let patterns match the NodeJS core modules or not.
+
+## color _(boolean) (default: true)_
+
+Colorful ouput.
 
 ## reference
 
