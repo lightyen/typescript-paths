@@ -1,6 +1,6 @@
 {
   "name": "typescript-paths",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Resolving tsconfig paths in runtime",
   "license": "MIT",
   "main": "dist/index.cjs.js",
