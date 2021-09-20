@@ -20,7 +20,10 @@ interface OptionFallback {
 export function fromTS_NODE_PROJECT(): string | string[] | undefined {
 	const env = process.env["TS_NODE_PROJECT"]
 	if (env) {
-		return env.split(path.delimiter).filter(Boolean)
+		const tsConfigPaths = env.split(path.delimiter).filter(Boolean)
+		if (tsConfigPaths.length > 0) {
+			return tsConfigPaths
+		}
 	}
 	return undefined
 }
@@ -47,6 +50,9 @@ export function createHandler({
 	}
 	try {
 		for (const cfg of tsConfigPath) {
+			if (logLevel === "debug") {
+				console.log(formatLog({ level: "info", value: `loading: ${cfg}`, colors, loggerID }))
+			}
 			const { compilerOptions, fileNames, errors } = getTsConfig({
 				tsConfigPath: cfg,
 				host: ts.sys,
@@ -142,7 +148,7 @@ export function register({
 	const originalResolveFilename = Module["_resolveFilename"]
 
 	Module["_resolveFilename"] = function (request: string, parent: Module, ...args: any[]) {
-		const moduleName = handler(request, parent["filename"])
+		const moduleName = handler(request, parent.filename)
 		if (moduleName) {
 			if (logLevel === "debug") {
 				console.log(
