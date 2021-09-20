@@ -4,6 +4,7 @@ interface Options {
 	respectCoreModule?: boolean
 	colors?: boolean
 	strict?: boolean
+	loggerID?: string
 }
 interface OptionFallback {
 	falllback?: (moduleName: string) => string | undefined
@@ -15,6 +16,7 @@ export declare function createHandler({
 	logLevel,
 	colors,
 	strict,
+	loggerID,
 	falllback,
 }?: Options & OptionFallback): ((request: string, importer: string) => string | undefined) | undefined
 export declare function register({
@@ -23,6 +25,7 @@ export declare function register({
 	logLevel,
 	colors,
 	strict,
+	loggerID,
 	falllback,
 }?: Options & OptionFallback): () => void
 export {}

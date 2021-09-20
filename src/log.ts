@@ -1,14 +1,22 @@
-export type LogLevel = "warn" | "debug" | "none"
-
-export function formatLog(level: "error" | "warn" | "info", value: unknown, colors = true) {
+export function formatLog({
+	level,
+	value,
+	colors = true,
+	loggerID = "typescript-paths",
+}: {
+	level: "error" | "warn" | "info"
+	value: unknown
+	colors?: boolean
+	loggerID?: string
+}) {
 	let message = ""
 	switch (level) {
 		case "error":
-			message = `[typescript-paths]: ${value}`
+			message = `[${loggerID}]: ${value}`
 		case "warn":
-			message = `[typescript-paths]: ${value}`
+			message = `[${loggerID}]: ${value}`
 		default:
-			message = `[typescript-paths]: ${value}`
+			message = `[${loggerID}]: ${value}`
 	}
 
 	if (colors) {

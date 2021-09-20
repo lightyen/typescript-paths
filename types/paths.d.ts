@@ -45,10 +45,12 @@ export declare function getTsConfig({
 	tsConfigPath,
 	host,
 	colors,
+	loggerID,
 }: {
 	tsConfigPath: string
 	host?: ts.ParseConfigHost
 	colors?: boolean
+	loggerID?: string
 }): {
 	compilerOptions: ts.CompilerOptions
 	fileNames: string[]
@@ -59,11 +61,13 @@ export declare function createMappings({
 	respectCoreModule,
 	logLevel,
 	colors,
+	loggerID,
 }: {
 	paths: ts.MapLike<string[]>
 	respectCoreModule?: boolean
 	logLevel?: "warn" | "debug" | "none"
 	colors?: boolean
+	loggerID?: string
 }): Mapping[]
 export declare function isPatternMatch(prefix: string, suffix: string, candidate: string): boolean
 export declare function findMatch(moduleName: string, mappings: Mapping[]): Mapping | undefined

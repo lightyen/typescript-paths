@@ -1,2 +1,11 @@
-export declare type LogLevel = "warn" | "debug" | "none"
-export declare function formatLog(level: "error" | "warn" | "info", value: unknown, colors?: boolean): string
+export declare function formatLog({
+	level,
+	value,
+	colors,
+	loggerID,
+}: {
+	level: "error" | "warn" | "info"
+	value: unknown
+	colors?: boolean
+	loggerID?: string
+}): string

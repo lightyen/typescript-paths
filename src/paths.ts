@@ -50,14 +50,23 @@ export function getTsConfig({
 	tsConfigPath,
 	host = ts.sys,
 	colors = false,
+	loggerID,
 }: {
 	tsConfigPath: string
 	host?: ts.ParseConfigHost
 	colors?: boolean
+	loggerID?: string
 }) {
 	const { error, config } = ts.readConfigFile(tsConfigPath, host.readFile)
 	if (error) {
-		throw new Error(formatLog("error", error.messageText, colors))
+		throw new Error(
+			formatLog({
+				level: "error",
+				value: error.messageText,
+				colors,
+				loggerID,
+			}),
+		)
 	}
 
 	let {
@@ -81,11 +90,13 @@ export function createMappings({
 	respectCoreModule = true,
 	logLevel = "none",
 	colors = false,
+	loggerID,
 }: {
 	paths: ts.MapLike<string[]>
 	respectCoreModule?: boolean
 	logLevel?: "warn" | "debug" | "none"
 	colors?: boolean
+	loggerID?: string
 }): Mapping[] {
 	const countWildcard = (value: string) => value.match(/\*/g)?.length ?? 0
 	const valid = (value: string) => /(\*|\/\*|\/\*\/)/.test(value)
@@ -94,12 +105,27 @@ export function createMappings({
 	for (const pattern of Object.keys(paths)) {
 		if (countWildcard(pattern) > 1) {
 			logLevel != "none" &&
-				console.warn(formatLog("warn", `Pattern '${pattern}' can have at most one '*' character.`, colors))
+				console.warn(
+					formatLog({
+						level: "warn",
+						value: `Pattern '${pattern}' can have at most one '*' character.`,
+						colors,
+						loggerID,
+					}),
+				)
 			continue
 		}
 		const wildcard = pattern.indexOf("*")
 		if (wildcard !== -1 && !valid(pattern)) {
-			logLevel != "none" && console.warn(formatLog("warn", `path pattern '${pattern}' is not valid.`, colors))
+			logLevel != "none" &&
+				console.warn(
+					formatLog({
+						level: "warn",
+						value: `path pattern '${pattern}' is not valid.`,
+						colors,
+						loggerID,
+					}),
+				)
 			continue
 		}
 		if (respectCoreModule) {
@@ -107,9 +133,21 @@ export function createMappings({
 				if (pattern.startsWith(key)) {
 					if (logLevel != "none") {
 						console.warn(
-							formatLog("warn", `path pattern core modules like '${pattern}' is ignored.`, colors),
+							formatLog({
+								level: "warn",
+								value: `path pattern core modules like '${pattern}' is ignored.`,
+								colors,
+								loggerID,
+							}),
 						)
-						console.log(formatLog("info", `(${key}) ${coreModules[key]}`, colors))
+						console.log(
+							formatLog({
+								level: "info",
+								value: `(${key}) ${coreModules[key]}`,
+								colors,
+								loggerID,
+							}),
+						)
 					}
 					continue
 				}
@@ -119,21 +157,38 @@ export function createMappings({
 			if (countWildcard(target) > 1) {
 				logLevel != "none" &&
 					console.warn(
-						formatLog(
-							"warn",
-							`Substitution '${target}' in pattern '${pattern}' can have at most one '*' character.`,
+						formatLog({
+							level: "warn",
+							value: `Substitution '${target}' in pattern '${pattern}' can have at most one '*' character.`,
 							colors,
-						),
+							loggerID,
+						}),
 					)
 				return false
 			}
 			const wildcard = target.indexOf("*")
 			if (wildcard !== -1 && !valid(target)) {
-				logLevel != "none" && console.warn(formatLog("warn", `target pattern '${target}' is not valid`, colors))
+				logLevel != "none" &&
+					console.warn(
+						formatLog({
+							level: "warn",
+							value: `target pattern '${target}' is not valid`,
+							colors,
+							loggerID,
+						}),
+					)
 				return false
 			}
 			if (target.indexOf("@types") !== -1 || target.endsWith(".d.ts")) {
-				logLevel != "none" && console.warn(formatLog("warn", `type defined ${target} is ignored.`, colors))
+				logLevel != "none" &&
+					console.warn(
+						formatLog({
+							level: "warn",
+							value: `type defined ${target} is ignored.`,
+							colors,
+							loggerID,
+						}),
+					)
 				return false
 			}
 			return true
@@ -156,7 +211,14 @@ export function createMappings({
 
 	if (logLevel === "debug") {
 		for (const mapping of mappings) {
-			console.log(formatLog("info", `pattern: '${mapping.pattern}' targets: '${mapping.targets}'`, colors))
+			console.log(
+				formatLog({
+					level: "info",
+					value: `pattern: '${mapping.pattern}' targets: '${mapping.targets}'`,
+					colors,
+					loggerID,
+				}),
+			)
 		}
 	}
 	return mappings

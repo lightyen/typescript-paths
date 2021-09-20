@@ -10,6 +10,7 @@ interface Options {
 	respectCoreModule?: boolean
 	colors?: boolean
 	strict?: boolean
+	loggerID?: string
 }
 
 interface OptionFallback {
@@ -37,6 +38,7 @@ export function createHandler({
 	logLevel = "warn",
 	colors = true,
 	strict = false,
+	loggerID,
 	falllback,
 }: Options & OptionFallback = {}) {
 	const services: Service[] = []
@@ -45,19 +47,44 @@ export function createHandler({
 	}
 	try {
 		for (const cfg of tsConfigPath) {
-			const { compilerOptions, fileNames, errors } = getTsConfig({ tsConfigPath: cfg, host: ts.sys, colors })
+			const { compilerOptions, fileNames, errors } = getTsConfig({
+				tsConfigPath: cfg,
+				host: ts.sys,
+				colors,
+				loggerID,
+			})
 			for (const err of errors) {
-				console.error(formatLog("error", err.messageText, colors))
+				console.error(
+					formatLog({
+						level: "error",
+						value: err.messageText,
+						colors,
+						loggerID,
+					}),
+				)
 			}
 			services.push({
 				compilerOptions,
 				fileNames,
-				mappings: createMappings({ logLevel, respectCoreModule, paths: compilerOptions.paths!, colors }),
+				mappings: createMappings({
+					logLevel,
+					respectCoreModule,
+					paths: compilerOptions.paths!,
+					colors,
+					loggerID,
+				}),
 				cache: new Map(),
 			})
 		}
 	} catch (err) {
-		console.error(formatLog("error", err, colors))
+		console.error(
+			formatLog({
+				level: "error",
+				value: err,
+				colors,
+				loggerID,
+			}),
+		)
 		return undefined
 	}
 
@@ -104,6 +131,7 @@ export function register({
 	logLevel = "warn",
 	colors = true,
 	strict = false,
+	loggerID,
 	falllback,
 }: Options & OptionFallback = {}): () => void {
 	const handler = createHandler({ tsConfigPath, respectCoreModule, logLevel, colors, strict, falllback })
@@ -117,7 +145,14 @@ export function register({
 		const moduleName = handler(request, parent["filename"])
 		if (moduleName) {
 			if (logLevel === "debug") {
-				console.log(formatLog("info", `${request} -> ${moduleName}`, colors))
+				console.log(
+					formatLog({
+						level: "info",
+						value: `${request} -> ${moduleName}`,
+						colors,
+						loggerID,
+					}),
+				)
 			}
 			return originalResolveFilename.apply(this, [moduleName, parent, ...args])
 		}
