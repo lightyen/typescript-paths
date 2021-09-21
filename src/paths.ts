@@ -1,6 +1,6 @@
 import path from "path"
 import ts from "typescript"
-import { formatLog } from "./log"
+import { createLogger, LogFunc, LogLevel } from "./logger"
 
 export const coreModules = {
 	assert: "provides a set of assertion functions useful for testing",
@@ -48,25 +48,32 @@ interface Mapping {
 
 export function getTsConfig({
 	tsConfigPath,
+	log = createLogger(),
 	host = ts.sys,
-	colors = false,
-	loggerID,
 }: {
 	tsConfigPath: string
+	log?: LogFunc
 	host?: ts.ParseConfigHost
-	colors?: boolean
-	loggerID?: string
-}) {
+}): undefined | { compilerOptions: ts.CompilerOptions; fileNames: string[] } {
 	const { error, config } = ts.readConfigFile(tsConfigPath, host.readFile)
 	if (error) {
-		throw new Error(
-			formatLog({
-				level: "error",
-				value: error.messageText,
-				colors,
-				loggerID,
-			}),
-		)
+		let hasError = false
+		switch (error.category) {
+			case ts.DiagnosticCategory.Error:
+				log(LogLevel.Error, error.messageText)
+				hasError = true
+				break
+			case ts.DiagnosticCategory.Warning:
+				log(LogLevel.Warning, error.messageText)
+				break
+			case ts.DiagnosticCategory.Suggestion:
+				log(LogLevel.Info, error.messageText)
+				break
+			case ts.DiagnosticCategory.Message:
+				log(LogLevel.Info, error.messageText)
+				break
+		}
+		if (hasError) return undefined
 	}
 
 	let {
@@ -75,6 +82,28 @@ export function getTsConfig({
 		fileNames,
 	} = ts.parseJsonConfigFileContent(config, host, path.resolve(path.dirname(tsConfigPath)))
 
+	if (errors.length > 0) {
+		let hasError = false
+		for (const error of errors) {
+			switch (error.category) {
+				case ts.DiagnosticCategory.Error:
+					log(LogLevel.Error, error.messageText)
+					hasError = true
+					break
+				case ts.DiagnosticCategory.Warning:
+					log(LogLevel.Warning, error.messageText)
+					break
+				case ts.DiagnosticCategory.Suggestion:
+					log(LogLevel.Info, error.messageText)
+					break
+				case ts.DiagnosticCategory.Message:
+					log(LogLevel.Info, error.messageText)
+					break
+			}
+		}
+		if (hasError) return undefined
+	}
+
 	if (compilerOptions.baseUrl == undefined) {
 		compilerOptions.baseUrl = path.dirname(tsConfigPath)
 	}
@@ -82,21 +111,17 @@ export function getTsConfig({
 	if (!compilerOptions.paths || compilerOptions.paths instanceof Array) {
 		compilerOptions.paths = {}
 	}
-	return { compilerOptions, fileNames: fileNames.map(path.normalize), errors }
+	return { compilerOptions, fileNames: fileNames.map(path.normalize) }
 }
 
 export function createMappings({
 	paths,
+	log = createLogger(),
 	respectCoreModule = true,
-	logLevel = "none",
-	colors = false,
-	loggerID,
 }: {
 	paths: ts.MapLike<string[]>
+	log?: LogFunc
 	respectCoreModule?: boolean
-	logLevel?: "warn" | "debug" | "none"
-	colors?: boolean
-	loggerID?: string
 }): Mapping[] {
 	const countWildcard = (value: string) => value.match(/\*/g)?.length ?? 0
 	const valid = (value: string) => /(\*|\/\*|\/\*\/)/.test(value)
@@ -104,91 +129,34 @@ export function createMappings({
 	const mappings: Mapping[] = []
 	for (const pattern of Object.keys(paths)) {
 		if (countWildcard(pattern) > 1) {
-			logLevel != "none" &&
-				console.warn(
-					formatLog({
-						level: "warn",
-						value: `Pattern '${pattern}' can have at most one '*' character.`,
-						colors,
-						loggerID,
-					}),
-				)
+			log(LogLevel.Warning, `Pattern '${pattern}' can have at most one '*' character.`)
 			continue
 		}
 		const wildcard = pattern.indexOf("*")
 		if (wildcard !== -1 && !valid(pattern)) {
-			logLevel != "none" &&
-				console.warn(
-					formatLog({
-						level: "warn",
-						value: `path pattern '${pattern}' is not valid.`,
-						colors,
-						loggerID,
-					}),
-				)
+			log(LogLevel.Warning, `path pattern '${pattern}' is not valid.`)
 			continue
 		}
 		if (respectCoreModule) {
 			for (const key in coreModules) {
 				if (pattern.startsWith(key)) {
-					if (logLevel != "none") {
-						console.warn(
-							formatLog({
-								level: "warn",
-								value: `path pattern core modules like '${pattern}' is ignored.`,
-								colors,
-								loggerID,
-							}),
-						)
-						console.log(
-							formatLog({
-								level: "info",
-								value: `(${key}) ${coreModules[key]}`,
-								colors,
-								loggerID,
-							}),
-						)
-					}
+					log(LogLevel.Warning, `path pattern core modules like '${pattern}' is ignored.`)
+					log(LogLevel.Info, `(${key}) ${coreModules[key]}`)
 					continue
 				}
 			}
 		}
 		const targets = paths[pattern].filter(target => {
 			if (countWildcard(target) > 1) {
-				logLevel != "none" &&
-					console.warn(
-						formatLog({
-							level: "warn",
-							value: `Substitution '${target}' in pattern '${pattern}' can have at most one '*' character.`,
-							colors,
-							loggerID,
-						}),
-					)
+				log(
+					LogLevel.Warning,
+					`Substitution '${target}' in pattern '${pattern}' can have at most one '*' character.`,
+				)
 				return false
 			}
 			const wildcard = target.indexOf("*")
 			if (wildcard !== -1 && !valid(target)) {
-				logLevel != "none" &&
-					console.warn(
-						formatLog({
-							level: "warn",
-							value: `target pattern '${target}' is not valid`,
-							colors,
-							loggerID,
-						}),
-					)
-				return false
-			}
-			if (target.indexOf("@types") !== -1 || target.endsWith(".d.ts")) {
-				logLevel != "none" &&
-					console.warn(
-						formatLog({
-							level: "warn",
-							value: `type defined ${target} is ignored.`,
-							colors,
-							loggerID,
-						}),
-					)
+				log(LogLevel.Warning, `target pattern '${target}' is not valid`)
 				return false
 			}
 			return true
@@ -209,18 +177,10 @@ export function createMappings({
 		})
 	}
 
-	if (logLevel === "debug") {
-		for (const mapping of mappings) {
-			console.log(
-				formatLog({
-					level: "info",
-					value: `pattern: '${mapping.pattern}' targets: '${mapping.targets}'`,
-					colors,
-					loggerID,
-				}),
-			)
-		}
+	for (const mapping of mappings) {
+		log(LogLevel.Debug, `pattern: '${mapping.pattern}' targets: '${mapping.targets}'`)
 	}
+
 	return mappings
 }
 

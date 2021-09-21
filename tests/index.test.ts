@@ -1,16 +1,22 @@
 import { createMappings, findMatch, getTsConfig, createHandler } from "../src"
 import path from "path"
+import { createLogger, LogLevel } from "../src/logger"
+
+const log = createLogger({ logLevel: LogLevel.None })
 
 test("read config", async () => {
-	const { compilerOptions } = getTsConfig({ tsConfigPath: path.resolve(__dirname, "bad.tsconfig.json") })
+	const config = getTsConfig({ log, tsConfigPath: path.resolve(__dirname, "bad.tsconfig.json") })
+	expect(config).toBeTruthy()
+	const compilerOptions = config!.compilerOptions
 	expect(compilerOptions).toBeTruthy()
-	expect(compilerOptions.baseUrl).toBeTruthy()
-	expect(compilerOptions.paths).toBeTruthy()
+	expect(compilerOptions!.baseUrl).toBeTruthy()
+	expect(compilerOptions!.paths).toBeTruthy()
 	expect(!(compilerOptions.paths instanceof Array)).toBeTruthy()
 })
 
 test("path mappings", async () => {
 	let mappings = createMappings({
+		log,
 		paths: {
 			"~/*": ["*"],
 			"abc/*": ["xxx/*"],
@@ -44,6 +50,7 @@ test("path mappings", async () => {
 
 	// 3. match the first pattern
 	mappings = createMappings({
+		log,
 		paths: {
 			"~/*": ["./*"],
 			"abc/*": ["xxx/*"],
@@ -60,6 +67,7 @@ test("path mappings", async () => {
 
 	// 2. invalid pattern
 	mappings = createMappings({
+		log,
 		respectCoreModule: true,
 		paths: {
 			"~/**/*": ["./*"],

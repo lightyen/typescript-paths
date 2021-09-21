@@ -1,4 +1,5 @@
 import ts from "typescript"
+import { LogFunc } from "./logger"
 export declare const coreModules: {
 	assert: string
 	buffer: string
@@ -43,31 +44,26 @@ interface Mapping {
 }
 export declare function getTsConfig({
 	tsConfigPath,
+	log,
 	host,
-	colors,
-	loggerID,
 }: {
 	tsConfigPath: string
+	log?: LogFunc
 	host?: ts.ParseConfigHost
-	colors?: boolean
-	loggerID?: string
-}): {
-	compilerOptions: ts.CompilerOptions
-	fileNames: string[]
-	errors: ts.Diagnostic[]
-}
+}):
+	| undefined
+	| {
+			compilerOptions: ts.CompilerOptions
+			fileNames: string[]
+	  }
 export declare function createMappings({
 	paths,
+	log,
 	respectCoreModule,
-	logLevel,
-	colors,
-	loggerID,
 }: {
 	paths: ts.MapLike<string[]>
+	log?: LogFunc
 	respectCoreModule?: boolean
-	logLevel?: "warn" | "debug" | "none"
-	colors?: boolean
-	loggerID?: string
 }): Mapping[]
 export declare function isPatternMatch(prefix: string, suffix: string, candidate: string): boolean
 export declare function findMatch(moduleName: string, mappings: Mapping[]): Mapping | undefined

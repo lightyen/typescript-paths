@@ -2,14 +2,14 @@ import ts from "typescript"
 import Module from "module"
 import path from "path"
 import { getTsConfig, createMappings, resolveModuleName } from "./paths"
-import { formatLog } from "./log"
+import { LogFunc, createLogger, LogLevel, LogLevelString, convertLogLevel } from "./logger"
 
 interface Options {
 	tsConfigPath?: string | string[]
-	logLevel?: "warn" | "debug" | "none"
 	respectCoreModule?: boolean
-	colors?: boolean
 	strict?: boolean
+	logLevel?: LogLevelString
+	colors?: boolean
 	loggerID?: string
 }
 
@@ -35,63 +35,44 @@ interface Service {
 	cache: Map<string, boolean>
 }
 
+interface HandlerOptions {
+	tsConfigPath?: string | string[]
+	respectCoreModule?: boolean
+	strict?: boolean
+	log?: LogFunc
+}
+
 export function createHandler({
 	tsConfigPath = fromTS_NODE_PROJECT() || ts.findConfigFile(".", ts.sys.fileExists) || "tsconfig.json",
 	respectCoreModule = true,
-	logLevel = "warn",
-	colors = true,
 	strict = false,
-	loggerID,
+	log = createLogger(),
 	falllback,
-}: Options & OptionFallback = {}) {
+}: HandlerOptions & OptionFallback = {}) {
 	const services: Service[] = []
 	if (typeof tsConfigPath === "string") {
 		tsConfigPath = [tsConfigPath]
 	}
-	try {
-		for (const cfg of tsConfigPath) {
-			if (logLevel === "debug") {
-				console.log(formatLog({ level: "info", value: `loading: ${cfg}`, colors, loggerID }))
-			}
-			const { compilerOptions, fileNames, errors } = getTsConfig({
-				tsConfigPath: cfg,
-				host: ts.sys,
-				colors,
-				loggerID,
-			})
-			for (const err of errors) {
-				console.error(
-					formatLog({
-						level: "error",
-						value: err.messageText,
-						colors,
-						loggerID,
-					}),
-				)
-			}
-			services.push({
-				compilerOptions,
-				fileNames,
-				mappings: createMappings({
-					logLevel,
-					respectCoreModule,
-					paths: compilerOptions.paths!,
-					colors,
-					loggerID,
-				}),
-				cache: new Map(),
-			})
-		}
-	} catch (err) {
-		console.error(
-			formatLog({
-				level: "error",
-				value: err,
-				colors,
-				loggerID,
+
+	for (const configPath of tsConfigPath) {
+		log(LogLevel.Trace, `loading: ${configPath}`)
+		const config = getTsConfig({
+			tsConfigPath: configPath,
+			host: ts.sys,
+			log,
+		})
+		if (!config) return undefined
+		const { compilerOptions, fileNames } = config
+		services.push({
+			compilerOptions,
+			fileNames,
+			mappings: createMappings({
+				log,
+				respectCoreModule,
+				paths: compilerOptions.paths!,
 			}),
-		)
-		return undefined
+			cache: new Map(),
+		})
 	}
 
 	const host: ts.ModuleResolutionHost = {
@@ -134,13 +115,14 @@ export function createHandler({
 export function register({
 	tsConfigPath = fromTS_NODE_PROJECT() || ts.findConfigFile(".", ts.sys.fileExists) || "tsconfig.json",
 	respectCoreModule = true,
-	logLevel = "warn",
-	colors = true,
 	strict = false,
+	logLevel = "info",
+	colors = true,
 	loggerID,
 	falllback,
 }: Options & OptionFallback = {}): () => void {
-	const handler = createHandler({ tsConfigPath, respectCoreModule, logLevel, colors, strict, falllback })
+	const log = createLogger({ logLevel: convertLogLevel(logLevel), colors, ID: loggerID })
+	const handler = createHandler({ tsConfigPath, respectCoreModule, log, strict, falllback })
 	if (!handler) {
 		return () => {}
 	}
@@ -150,16 +132,7 @@ export function register({
 	Module["_resolveFilename"] = function (request: string, parent: Module, ...args: any[]) {
 		const moduleName = handler(request, parent.filename)
 		if (moduleName) {
-			if (logLevel === "debug") {
-				console.log(
-					formatLog({
-						level: "info",
-						value: `${request} -> ${moduleName}`,
-						colors,
-						loggerID,
-					}),
-				)
-			}
+			log(LogLevel.Debug, `${request} -> ${moduleName}`)
 			return originalResolveFilename.apply(this, [moduleName, parent, ...args])
 		}
 		return originalResolveFilename.apply(this, arguments)

@@ -1,30 +1,35 @@
+import { LogFunc, LogLevelString } from "./logger"
 interface Options {
 	tsConfigPath?: string | string[]
-	logLevel?: "warn" | "debug" | "none"
 	respectCoreModule?: boolean
-	colors?: boolean
 	strict?: boolean
+	logLevel?: LogLevelString
+	colors?: boolean
 	loggerID?: string
 }
 interface OptionFallback {
 	falllback?: (moduleName: string) => string | undefined
 }
 export declare function fromTS_NODE_PROJECT(): string | string[] | undefined
+interface HandlerOptions {
+	tsConfigPath?: string | string[]
+	respectCoreModule?: boolean
+	strict?: boolean
+	log?: LogFunc
+}
 export declare function createHandler({
 	tsConfigPath,
 	respectCoreModule,
-	logLevel,
-	colors,
 	strict,
-	loggerID,
+	log,
 	falllback,
-}?: Options & OptionFallback): ((request: string, importer: string) => string | undefined) | undefined
+}?: HandlerOptions & OptionFallback): ((request: string, importer: string) => string | undefined) | undefined
 export declare function register({
 	tsConfigPath,
 	respectCoreModule,
+	strict,
 	logLevel,
 	colors,
-	strict,
 	loggerID,
 	falllback,
 }?: Options & OptionFallback): () => void
