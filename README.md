@@ -46,9 +46,9 @@ If not set:
 - use Environment variable **TS_NODE_PROJECT**
 - or search tsconfig.json in current working directory.
 
-### logLevel _("warn" | "debug" | "none") (default: "warn")_
+### logLevel _("none" | "error" | "warn" | "info" | "debug" | "trace") (default: "info")_
 
-Log level when the plugin is running.
+Set the logging level on the plugin.
 
 ### fallback _(function (string): string | undefined)_
 
