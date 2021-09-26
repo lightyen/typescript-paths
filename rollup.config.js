@@ -10,13 +10,11 @@ export default [
 			{
 				file: pkg.module,
 				format: "esm",
-				sourcemap: true,
 			},
 			{
 				file: pkg.main,
 				format: "cjs",
 				exports: "named",
-				sourcemap: true,
 			},
 		],
 		plugins: [
