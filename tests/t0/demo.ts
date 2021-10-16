@@ -4,6 +4,7 @@ import { rollup } from "roll"
 import { doSomething as xyz } from "#m/abc"
 import hello from "~/hello"
 import { hello as h } from "~/qqq/hello"
+import xx from "@q"
 
 hello()
 h(2)

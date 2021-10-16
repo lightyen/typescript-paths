@@ -12,7 +12,9 @@
       "@xxx/*/xxx": ["./xyz/*/xyz"],
       "@xxx/*": ["./abc/*"],
       "#m/*": ["./abc/*", "./xyz/*/xyz"],
-      "roll": ["../../node_modules/rollup"]
+      "roll": ["../../node_modules/rollup"],
+      "@p": ["./xx/ee.js"],
+      "@q": ["./xx/ee.ts"]
     }
   },
   "include": ["**/*"]

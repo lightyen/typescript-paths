@@ -1,5 +1,6 @@
 import path from "path"
 import ts from "typescript"
+import fs from "fs"
 import { createLogger, LogFunc, LogLevel } from "./logger"
 
 export const coreModules = {
@@ -237,6 +238,8 @@ export function resolveModuleName({
 	for (const target of matched.targets) {
 		const updated = matched.wildcard ? target.replace("*", matchedWildcard) : target
 		const moduleName = path.resolve(compilerOptions.baseUrl!, updated)
+		const ext = path.extname(moduleName)
+		if (ext) return moduleName
 		const result = ts.resolveModuleName(moduleName, importer, compilerOptions, host)
 		if (result?.resolvedModule) {
 			return path.normalize(result.resolvedModule.resolvedFileName)
