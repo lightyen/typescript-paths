@@ -6,6 +6,10 @@ import hello from "~/hello"
 import { hello as h } from "~/qqq/hello"
 import xx from "@q"
 
+import { normalize } from "@p"
+// @ts-expect-error
+import { escape } from "@p"
+
 hello()
 h(2)
 doSomething("/*/*/")

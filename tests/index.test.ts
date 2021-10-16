@@ -92,7 +92,7 @@ test("resolving paths", async () => {
 	expect(resolve("roll")).toEqual(require.resolve("rollup"))
 	expect(resolve("./t0/abc/App")).toBeFalsy()
 	expect(resolve("rollup")).toBeFalsy()
-	expect(resolve("@p")).toEqual(path.resolve(__dirname, "t0", "xx/ee.js"))
+	expect(resolve("@p")).toEqual(path.resolve(__dirname, "t0", "xx/qq.ts"))
 	expect(resolve("@q")).toEqual(path.resolve(__dirname, "t0", "xx/ee.ts"))
 })
 

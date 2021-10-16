@@ -13,7 +13,7 @@
       "@xxx/*": ["./abc/*"],
       "#m/*": ["./abc/*", "./xyz/*/xyz"],
       "roll": ["../../node_modules/rollup"],
-      "@p": ["./xx/ee.js"],
+      "@p": ["./xx/qq.ts", "./xx/ff.ts"],
       "@q": ["./xx/ee.ts"]
     }
   },
