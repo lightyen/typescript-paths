@@ -14,7 +14,9 @@
       "#m/*": ["./abc/*", "./xyz/*/xyz"],
       "roll": ["../../node_modules/rollup"],
       "@p": ["./xx/qq.ts", "./xx/ff.ts"],
-      "@q": ["./xx/ee.ts"]
+      "@q": ["./xx/ee.ts"],
+      "#v": ["./xx/vv.abs"],
+      "@v": ["./xx/vv.abs.ts"]
     }
   },
   "include": ["**/*"]

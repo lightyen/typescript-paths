@@ -239,7 +239,14 @@ export function resolveModuleName({
 		const updated = matched.wildcard ? target.replace("*", matchedWildcard) : target
 		const moduleName = path.resolve(compilerOptions.baseUrl!, updated)
 		const ext = path.extname(moduleName)
-		if (ext) return moduleName
+		switch (ext) {
+			case ".ts":
+			case ".tsx":
+			case ".json":
+			case ".js":
+			case ".jsx":
+				return moduleName
+		}
 		const result = ts.resolveModuleName(moduleName, importer, compilerOptions, host)
 		if (result?.resolvedModule) {
 			return path.normalize(result.resolvedModule.resolvedFileName)

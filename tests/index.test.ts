@@ -94,6 +94,8 @@ test("resolving paths", async () => {
 	expect(resolve("rollup")).toBeFalsy()
 	expect(resolve("@p")).toEqual(path.resolve(__dirname, "t0", "xx/qq.ts"))
 	expect(resolve("@q")).toEqual(path.resolve(__dirname, "t0", "xx/ee.ts"))
+	expect(resolve("#v")).toEqual(path.resolve(__dirname, "t0", "xx/vv.abs.ts"))
+	expect(resolve("@v")).toEqual(path.resolve(__dirname, "t0", "xx/vv.abs.ts"))
 })
 
 test("multiple projects (not checking filenames)", async () => {

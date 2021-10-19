@@ -10,6 +10,8 @@ import { normalize } from "@p"
 // @ts-expect-error
 import { escape } from "@p"
 
+import { setV } from "#v"
+
 hello()
 h(2)
 doSomething("/*/*/")
