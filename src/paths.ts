@@ -39,7 +39,7 @@ export const coreModules = {
 	zlib: "provides compression functionality",
 }
 
-interface Mapping {
+export interface Mapping {
 	pattern: string
 	prefix: string
 	suffix: string

@@ -35,7 +35,7 @@ export declare const coreModules: {
 	worker: string
 	zlib: string
 }
-interface Mapping {
+export interface Mapping {
 	pattern: string
 	prefix: string
 	suffix: string
@@ -83,4 +83,3 @@ export declare function resolveModuleName({
 	host: ts.ModuleResolutionHost
 	falllback?: (moduleName: string) => string | undefined
 }): string | undefined
-export {}
