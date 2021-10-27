@@ -98,6 +98,43 @@ test("resolving paths", async () => {
 	expect(resolve("@v")).toEqual(path.resolve(__dirname, "t0", "xx/vv.abs.ts"))
 })
 
+test("use memory config", async () => {
+	const handler = createHandler({
+		tsConfigPath: {
+			compilerOptions: {
+				baseUrl: path.resolve(__dirname, "t0"),
+				paths: {
+					"~/*": ["./*"],
+					"@xxx/*/xxx": ["./xyz/*/xyz"],
+					"@xxx/*": ["./abc/*"],
+					"#m/*": ["./abc/*", "./xyz/*/xyz"],
+					roll: ["../../node_modules/rollup"],
+					"@p": ["./xx/qq.ts", "./xx/ff.ts"],
+					"@q": ["./xx/ee.ts"],
+					"#v": ["./xx/vv.abs"],
+					"@v": ["./xx/vv.abs.ts"],
+				},
+			},
+		},
+	})
+	expect(handler).toBeTruthy()
+
+	const resolve = (request: string) => handler!(request, path.resolve(__dirname, "t0", "demo.ts"))
+	expect(resolve("~/hello")).toEqual(path.resolve(__dirname, "t0", "hello.ts"))
+	expect(resolve("~/qqq/hello")).toEqual(require.resolve(path.join(__dirname, "t0", "qqq/hello.js")))
+	expect(resolve("@xxx/abc/xxx")).toEqual(path.resolve(__dirname, "t0", "xyz/abc/xyz.ts"))
+	expect(resolve("@xxx/fff")).toEqual(path.resolve(__dirname, "t0", "abc/fff.js"))
+	expect(resolve("#m/abc")).toEqual(path.resolve(__dirname, "t0", "xyz/abc/xyz.ts"))
+	expect(resolve("#m/fff")).toEqual(path.resolve(__dirname, "t0", "abc/fff.js"))
+	expect(resolve("roll")).toEqual(require.resolve("rollup"))
+	expect(resolve("./t0/abc/App")).toBeFalsy()
+	expect(resolve("rollup")).toBeFalsy()
+	expect(resolve("@p")).toEqual(path.resolve(__dirname, "t0", "xx/qq.ts"))
+	expect(resolve("@q")).toEqual(path.resolve(__dirname, "t0", "xx/ee.ts"))
+	expect(resolve("#v")).toEqual(path.resolve(__dirname, "t0", "xx/vv.abs.ts"))
+	expect(resolve("@v")).toEqual(path.resolve(__dirname, "t0", "xx/vv.abs.ts"))
+})
+
 test("multiple projects (not checking filenames)", async () => {
 	process.env["TS_NODE_PROJECT"] = [
 		path.resolve(__dirname, "t0/tsconfig.json"),

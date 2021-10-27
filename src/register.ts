@@ -1,11 +1,11 @@
 import ts from "typescript"
 import Module from "module"
 import path from "path"
-import { getTsConfig, createMappings, resolveModuleName } from "./paths"
+import { getTsConfig, TsConfigPayload, createMappings, resolveModuleName } from "./paths"
 import { LogFunc, createLogger, LogLevel, LogLevelString, convertLogLevel } from "./logger"
 
 interface Options {
-	tsConfigPath?: string | string[]
+	tsConfigPath?: string | string[] | TsConfigPayload | TsConfigPayload[]
 	respectCoreModule?: boolean
 	strict?: boolean
 	logLevel?: LogLevelString
@@ -36,9 +36,9 @@ interface Service {
 }
 
 interface HandlerOptions {
-	tsConfigPath?: string | string[]
-	respectCoreModule?: boolean
-	strict?: boolean
+	tsConfigPath?: Options["tsConfigPath"]
+	respectCoreModule?: Options["respectCoreModule"]
+	strict?: Options["strict"]
 	log?: LogFunc
 }
 
@@ -52,17 +52,22 @@ export function createHandler({
 	const services: Service[] = []
 	if (typeof tsConfigPath === "string") {
 		tsConfigPath = [tsConfigPath]
+	} else if (!(tsConfigPath instanceof Array)) {
+		tsConfigPath = [tsConfigPath]
 	}
 
-	for (const configPath of tsConfigPath) {
-		log(LogLevel.Trace, `loading: ${configPath}`)
-		const config = getTsConfig({
-			tsConfigPath: configPath,
-			host: ts.sys,
-			log,
-		})
+	for (const configPayloadOrPath of tsConfigPath) {
+		if (typeof configPayloadOrPath === "string") log(LogLevel.Trace, `loading: ${configPayloadOrPath}`)
+		const config =
+			typeof configPayloadOrPath === "string"
+				? getTsConfig({
+						tsConfigPath: configPayloadOrPath,
+						host: ts.sys,
+						log,
+				  })
+				: configPayloadOrPath
 		if (!config) return undefined
-		const { compilerOptions, fileNames } = config
+		const { compilerOptions, fileNames = [] } = config
 		services.push({
 			compilerOptions,
 			fileNames,

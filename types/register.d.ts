@@ -1,6 +1,7 @@
+import { TsConfigPayload } from "./paths"
 import { LogFunc, LogLevelString } from "./logger"
 interface Options {
-	tsConfigPath?: string | string[]
+	tsConfigPath?: string | string[] | TsConfigPayload | TsConfigPayload[]
 	respectCoreModule?: boolean
 	strict?: boolean
 	logLevel?: LogLevelString
@@ -12,9 +13,9 @@ interface OptionFallback {
 }
 export declare function fromTS_NODE_PROJECT(): string | string[] | undefined
 interface HandlerOptions {
-	tsConfigPath?: string | string[]
-	respectCoreModule?: boolean
-	strict?: boolean
+	tsConfigPath?: Options["tsConfigPath"]
+	respectCoreModule?: Options["respectCoreModule"]
+	strict?: Options["strict"]
 	log?: LogFunc
 }
 export declare function createHandler({

@@ -1,6 +1,5 @@
 import path from "path"
 import ts from "typescript"
-import fs from "fs"
 import { createLogger, LogFunc, LogLevel } from "./logger"
 
 export const coreModules = {
@@ -47,6 +46,11 @@ export interface Mapping {
 	targets: string[]
 }
 
+export interface TsConfigPayload {
+	compilerOptions: ts.CompilerOptions
+	fileNames?: string[]
+}
+
 export function getTsConfig({
 	tsConfigPath,
 	log = createLogger(),
@@ -55,7 +59,7 @@ export function getTsConfig({
 	tsConfigPath: string
 	log?: LogFunc
 	host?: ts.ParseConfigHost
-}): undefined | { compilerOptions: ts.CompilerOptions; fileNames: string[] } {
+}): undefined | TsConfigPayload {
 	const { error, config } = ts.readConfigFile(tsConfigPath, host.readFile)
 	if (error) {
 		let hasError = false

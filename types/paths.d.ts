@@ -42,6 +42,10 @@ export interface Mapping {
 	wildcard: boolean
 	targets: string[]
 }
+export interface TsConfigPayload {
+	compilerOptions: ts.CompilerOptions
+	fileNames?: string[]
+}
 export declare function getTsConfig({
 	tsConfigPath,
 	log,
@@ -50,12 +54,7 @@ export declare function getTsConfig({
 	tsConfigPath: string
 	log?: LogFunc
 	host?: ts.ParseConfigHost
-}):
-	| undefined
-	| {
-			compilerOptions: ts.CompilerOptions
-			fileNames: string[]
-	  }
+}): undefined | TsConfigPayload
 export declare function createMappings({
 	paths,
 	log,
