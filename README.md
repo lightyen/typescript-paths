@@ -54,10 +54,6 @@ Set the logging level on the plugin.
 
 The handler to handle unusual module name.
 
-### strict _(boolean) (default: false)_
-
-Check whether each filename is including by tsconfig or not.
-
 ### color _(boolean) (default: true)_
 
 Colorful ouput.
