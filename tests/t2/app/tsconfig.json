@@ -1,0 +1,16 @@
+{
+  "compilerOptions": {
+    "paths": {
+      "shared/*": ["../shared/*"],
+      "shared2/*": ["../shared2/*"]
+    }
+  },
+  "references": [
+    {
+      "path": "../shared"
+    },
+    {
+      "path": "../shared2/tsconfig.json"
+    }
+  ]
+}

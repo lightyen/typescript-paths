@@ -1,6 +1,7 @@
 import { createMappings, findMatch, getTsConfig, createHandler } from "../src"
 import path from "path"
 import { createLogger, LogLevel } from "../src/logger"
+import { existsSync } from "fs"
 
 const log = createLogger({ logLevel: LogLevel.None })
 
@@ -115,6 +116,7 @@ test("use memory config", async () => {
 					"@v": ["./xx/vv.abs.ts"],
 				},
 			},
+			fileNames: [path.resolve(__dirname, "t0", "demo.ts")],
 		},
 	})
 	expect(handler).toBeTruthy()
@@ -135,45 +137,12 @@ test("use memory config", async () => {
 	expect(resolve("@v")).toEqual(path.resolve(__dirname, "t0", "xx/vv.abs.ts"))
 })
 
-test("multiple projects (not checking filenames)", async () => {
+test("multiple projects", async () => {
 	process.env["TS_NODE_PROJECT"] = [
 		path.resolve(__dirname, "t0/tsconfig.json"),
 		path.resolve(__dirname, "t1/tsconfig.json"),
 	].join(path.delimiter)
-	const handler = createHandler()
-	expect(handler).toBeTruthy()
-
-	const resolveT0 = (request: string) => handler!(request, path.resolve(__dirname, "t0", "demo.ts"))
-	const resolveT1 = (request: string) => handler!(request, path.resolve(__dirname, "t1", "index.ts"))
-
-	expect(resolveT0("~/hello")).toEqual(path.resolve(__dirname, "t0", "hello.ts"))
-	expect(resolveT0("~/qqq/hello")).toEqual(require.resolve(path.join(__dirname, "t0", "qqq/hello.js")))
-	expect(resolveT0("@xxx/abc/xxx")).toEqual(path.resolve(__dirname, "t0", "xyz/abc/xyz.ts"))
-	expect(resolveT0("@xxx/fff")).toEqual(path.resolve(__dirname, "t0", "abc/fff.js"))
-	expect(resolveT0("#m/abc")).toEqual(path.resolve(__dirname, "t0", "xyz/abc/xyz.ts"))
-	expect(resolveT0("#m/fff")).toEqual(path.resolve(__dirname, "t0", "abc/fff.js"))
-	expect(resolveT0("roll")).toEqual(require.resolve("rollup"))
-	expect(resolveT0("./t0/abc/App")).toBeFalsy()
-	expect(resolveT0("rollup")).toBeFalsy()
-
-	expect(resolveT1("~/hello")).toEqual(path.resolve(__dirname, "t0", "hello.ts"))
-	expect(resolveT1("~/qqq/hello")).toEqual(require.resolve(path.join(__dirname, "t0", "qqq/hello.js")))
-	expect(resolveT1("@xxx/abc/xxx")).toEqual(path.resolve(__dirname, "t0", "xyz/abc/xyz.ts"))
-	expect(resolveT1("@xxx/fff")).toEqual(path.resolve(__dirname, "t0", "abc/fff.js"))
-	expect(resolveT1("#m/abc")).toEqual(path.resolve(__dirname, "t0", "xyz/abc/xyz.ts"))
-	expect(resolveT1("#m/fff")).toEqual(path.resolve(__dirname, "t0", "abc/fff.js"))
-	expect(resolveT1("roll")).toEqual(require.resolve("rollup"))
-
-	expect(resolveT1("~hu/hello")).toEqual(path.resolve(__dirname, "t1", "he/hello.ts"))
-	expect(resolveT0("~hu/hello")).toEqual(path.resolve(__dirname, "t1", "he/hello.ts"))
-})
-
-test("multiple projects (checking filenames)", async () => {
-	process.env["TS_NODE_PROJECT"] = [
-		path.resolve(__dirname, "t0/tsconfig.json"),
-		path.resolve(__dirname, "t1/tsconfig.json"),
-	].join(path.delimiter)
-	const handler = createHandler({ strict: true })
+	const handler = createHandler({})
 	expect(handler).toBeTruthy()
 
 	const resolveT0 = (request: string) => handler!(request, path.resolve(__dirname, "t0", "demo.ts"))
@@ -199,4 +168,25 @@ test("multiple projects (checking filenames)", async () => {
 
 	expect(resolveT1("~hu/hello")).toEqual(path.resolve(__dirname, "t1", "he/hello.ts"))
 	expect(resolveT0("~hu/hello")).toEqual(undefined)
+})
+
+test("support project references", async () => {
+	const handler = createHandler({
+		falllback: moduleName => (existsSync(moduleName) ? moduleName : undefined),
+		tsConfigPath: path.resolve(__dirname, "t2/app/tsconfig.json"),
+	})
+	expect(handler).toBeTruthy()
+	if (!handler) return
+	expect(handler("helpers/bar", path.resolve(__dirname, "t2/shared/foo.ts"))).toEqual(
+		path.resolve(__dirname, "t2/shared/my-helpers/bar.ts"),
+	)
+	expect(handler("helpers/bar", path.resolve(__dirname, "t2/shared2/foo.ts"))).toEqual(
+		path.resolve(__dirname, "t2/shared2/my-helpers/bar.ts"),
+	)
+	expect(handler("img/pic.svg", path.resolve(__dirname, "t2/shared/foo.ts"))).toEqual(
+		path.resolve(__dirname, "t2/shared/pic.svg"),
+	)
+	expect(handler("img/pic.svg", path.resolve(__dirname, "t2/shared2/foo.ts"))).toEqual(
+		path.resolve(__dirname, "t2/shared2/pic.svg"),
+	)
 })

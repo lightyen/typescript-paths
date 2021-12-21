@@ -4,16 +4,15 @@ import path from "path"
 import { getTsConfig, TsConfigPayload, createMappings, resolveModuleName } from "./paths"
 import { LogFunc, createLogger, LogLevel, LogLevelString, convertLogLevel } from "./logger"
 
-interface Options {
+export interface Options {
 	tsConfigPath?: string | string[] | TsConfigPayload | TsConfigPayload[]
 	respectCoreModule?: boolean
-	strict?: boolean
 	logLevel?: LogLevelString
 	colors?: boolean
 	loggerID?: string
 }
 
-interface OptionFallback {
+export interface OptionFallback {
 	falllback?: (moduleName: string) => string | undefined
 }
 
@@ -35,17 +34,15 @@ interface Service {
 	cache: Map<string, boolean>
 }
 
-interface HandlerOptions {
+export interface HandlerOptions {
 	tsConfigPath?: Options["tsConfigPath"]
 	respectCoreModule?: Options["respectCoreModule"]
-	strict?: Options["strict"]
 	log?: LogFunc
 }
 
 export function createHandler({
 	tsConfigPath = fromTS_NODE_PROJECT() || ts.findConfigFile(".", ts.sys.fileExists) || "tsconfig.json",
 	respectCoreModule = true,
-	strict = false,
 	log = createLogger(),
 	falllback,
 }: HandlerOptions & OptionFallback = {}) {
@@ -54,6 +51,25 @@ export function createHandler({
 		tsConfigPath = [tsConfigPath]
 	} else if (!(tsConfigPath instanceof Array)) {
 		tsConfigPath = [tsConfigPath]
+	}
+
+	function addServices(config: TsConfigPayload) {
+		const { compilerOptions, fileNames = [], references } = config
+		services.push({
+			compilerOptions,
+			fileNames,
+			mappings: createMappings({
+				log,
+				respectCoreModule,
+				paths: compilerOptions.paths!,
+			}),
+			cache: new Map(),
+		})
+		if (references) {
+			for (const config of references) {
+				addServices(config)
+			}
+		}
 	}
 
 	for (const configPayloadOrPath of tsConfigPath) {
@@ -67,17 +83,7 @@ export function createHandler({
 				  })
 				: configPayloadOrPath
 		if (!config) return undefined
-		const { compilerOptions, fileNames = [] } = config
-		services.push({
-			compilerOptions,
-			fileNames,
-			mappings: createMappings({
-				log,
-				respectCoreModule,
-				paths: compilerOptions.paths!,
-			}),
-			cache: new Map(),
-		})
+		addServices(config)
 	}
 
 	const host: ts.ModuleResolutionHost = {
@@ -94,17 +100,15 @@ export function createHandler({
 				return result
 			}
 			const { compilerOptions, cache, fileNames, mappings } = srv
-			if (strict) {
-				const exist = cache.get(importer)
-				if (exist !== undefined) {
-					cache.delete(request)
-					cache.set(request, exist)
-					if (!exist) return undefined
-				} else if (fileNames.indexOf(importer) === -1) {
-					if (cache.size === 1 << 8) cache.delete(cache.keys().next().value)
-					cache.set(importer, false)
-					return undefined
-				}
+			const exist = cache.get(importer)
+			if (exist !== undefined) {
+				cache.delete(request)
+				cache.set(request, exist)
+				if (!exist) return undefined
+			} else if (fileNames.indexOf(importer) === -1) {
+				if (cache.size === 1 << 8) cache.delete(cache.keys().next().value)
+				cache.set(importer, false)
+				return undefined
 			}
 			return resolveModuleName({
 				compilerOptions,
@@ -120,14 +124,13 @@ export function createHandler({
 export function register({
 	tsConfigPath = fromTS_NODE_PROJECT() || ts.findConfigFile(".", ts.sys.fileExists) || "tsconfig.json",
 	respectCoreModule = true,
-	strict = false,
 	logLevel = "info",
 	colors = true,
 	loggerID,
 	falllback,
 }: Options & OptionFallback = {}): () => void {
 	const log = createLogger({ logLevel: convertLogLevel(logLevel), colors, ID: loggerID })
-	const handler = createHandler({ tsConfigPath, respectCoreModule, log, strict, falllback })
+	const handler = createHandler({ tsConfigPath, respectCoreModule, log, falllback })
 	if (!handler) {
 		return () => {}
 	}

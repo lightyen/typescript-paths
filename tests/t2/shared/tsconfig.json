@@ -1,0 +1,10 @@
+{
+  "compilerOptions": {
+    "composite": true,
+    "baseUrl": "..",
+    "paths": {
+      "img/*": ["shared/*"],
+      "helpers/*": ["shared/my-helpers/*"]
+    }
+  }
+}

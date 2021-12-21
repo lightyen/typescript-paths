@@ -1,3 +1,4 @@
+import fs from "fs"
 import path from "path"
 import ts from "typescript"
 import { createLogger, LogFunc, LogLevel } from "./logger"
@@ -49,6 +50,7 @@ export interface Mapping {
 export interface TsConfigPayload {
 	compilerOptions: ts.CompilerOptions
 	fileNames?: string[]
+	references?: TsConfigPayload[]
 }
 
 export function getTsConfig({
@@ -85,6 +87,7 @@ export function getTsConfig({
 		options: compilerOptions,
 		errors,
 		fileNames,
+		projectReferences,
 	} = ts.parseJsonConfigFileContent(config, host, path.resolve(path.dirname(tsConfigPath)))
 
 	if (errors.length > 0) {
@@ -116,7 +119,34 @@ export function getTsConfig({
 	if (!compilerOptions.paths || compilerOptions.paths instanceof Array) {
 		compilerOptions.paths = {}
 	}
-	return { compilerOptions, fileNames: fileNames.map(path.normalize) }
+
+	const ret: TsConfigPayload = { compilerOptions, fileNames: fileNames.map(path.normalize) }
+
+	if (projectReferences) {
+		ret.references = []
+		for (const r of projectReferences) {
+			let tsConfigPath = r.path
+			if (!path.isAbsolute(tsConfigPath)) {
+				tsConfigPath = path.resolve(compilerOptions.baseUrl, tsConfigPath)
+			}
+
+			try {
+				const stat = fs.lstatSync(tsConfigPath)
+				if (stat.isDirectory()) {
+					tsConfigPath = path.join(tsConfigPath, "tsconfig.json")
+				}
+			} catch (err) {
+				const error = err as Error
+				log(LogLevel.Error, error.message)
+				return undefined
+			}
+
+			const cfg = getTsConfig({ tsConfigPath, log, host })
+			if (cfg) ret.references.push(cfg)
+		}
+	}
+
+	return ret
 }
 
 export function createMappings({
