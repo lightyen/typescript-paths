@@ -1,0 +1,15 @@
+{
+  "extends": "../tsconfig.base",
+  "compilerOptions": {
+    "allowJs": true,
+    "noEmit": true,
+    "module": "esnext",
+    "moduleResolution": "node",
+    "jsx": "preserve",
+    "noImplicitAny": false,
+    "paths": {
+      "common/*": ["./util/common/*"]
+    }
+  },
+  "include": ["**/*"]
+}

@@ -15,7 +15,7 @@ test("read config", async () => {
 	expect(!(compilerOptions.paths instanceof Array)).toBeTruthy()
 })
 
-test("path mappings", async () => {
+test("build mappings", async () => {
 	let mappings = createMappings({
 		log,
 		paths: {
@@ -79,7 +79,7 @@ test("path mappings", async () => {
 	expect(mappings).toHaveLength(0)
 })
 
-test("resolving paths", async () => {
+test("resolving", async () => {
 	const handler = createHandler({ tsConfigPath: path.resolve(__dirname, "t0", "tsconfig.json") })
 	expect(handler).toBeTruthy()
 
@@ -99,7 +99,7 @@ test("resolving paths", async () => {
 	expect(resolve("@v")).toEqual(path.resolve(__dirname, "t0", "xx/vv.abs.ts"))
 })
 
-test("use memory config", async () => {
+test("support memory tsconfig", async () => {
 	const handler = createHandler({
 		tsConfigPath: {
 			compilerOptions: {
@@ -137,7 +137,7 @@ test("use memory config", async () => {
 	expect(resolve("@v")).toEqual(path.resolve(__dirname, "t0", "xx/vv.abs.ts"))
 })
 
-test("multiple projects", async () => {
+test("support multiple tsconfig", async () => {
 	process.env["TS_NODE_PROJECT"] = [
 		path.resolve(__dirname, "t0/tsconfig.json"),
 		path.resolve(__dirname, "t1/tsconfig.json"),
@@ -188,5 +188,17 @@ test("support project references", async () => {
 	)
 	expect(handler("img/pic.svg", path.resolve(__dirname, "t2/shared2/foo.ts"))).toEqual(
 		path.resolve(__dirname, "t2/shared2/pic.svg"),
+	)
+})
+
+test("support extends", async () => {
+	const handler = createHandler({
+		falllback: moduleName => (existsSync(moduleName) ? moduleName : undefined),
+		tsConfigPath: path.resolve(__dirname, "t3/src/tsconfig.json"),
+	})
+	expect(handler).toBeTruthy()
+	if (!handler) return
+	expect(handler("common/hello", path.resolve(__dirname, "t3/src/main.ts"))).toEqual(
+		path.resolve(__dirname, "t3/util/common/hello.ts"),
 	)
 })
