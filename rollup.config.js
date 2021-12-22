@@ -1,20 +1,20 @@
 import babel from "@rollup/plugin-babel"
-import nodeResolve from "@rollup/plugin-node-resolve"
 import commonjs from "@rollup/plugin-commonjs"
-import pkg from "./package.json"
+import nodeResolve from "@rollup/plugin-node-resolve"
 
 export default [
 	{
-		input: "src/index.ts",
+		input: ["src/index.ts", "src/register.ts"],
 		output: [
+			// {
+			// 	dir: "dist/esm",
+			// 	format: "esm",
+			// },
 			{
-				file: pkg.module,
-				format: "esm",
-			},
-			{
-				file: pkg.main,
+				dir: "dist",
 				format: "cjs",
 				exports: "named",
+				chunkFileNames: "[hash].js",
 			},
 		],
 		plugins: [

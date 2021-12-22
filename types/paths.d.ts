@@ -67,7 +67,6 @@ export declare function createMappings({
 }): Mapping[]
 export declare function isPatternMatch(prefix: string, suffix: string, candidate: string): boolean
 export declare function findMatch(moduleName: string, mappings: Mapping[]): Mapping | undefined
-export declare function containNodeModules(str: string): boolean
 export declare function resolveModuleName({
 	mappings,
 	request,

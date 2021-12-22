@@ -7,11 +7,10 @@ const log = createLogger({ logLevel: LogLevel.None })
 test("read bad config", async () => {
 	const config = getTsConfig({ log, tsConfigPath: path.resolve(__dirname, "bad.tsconfig.json") })
 	expect(config).toBeTruthy()
-	const compilerOptions = config!.compilerOptions
-	expect(compilerOptions).toBeTruthy()
-	expect(compilerOptions!.baseUrl).toBeFalsy()
-	expect(compilerOptions!.paths).toBeTruthy()
-	expect(!(compilerOptions.paths instanceof Array)).toBeTruthy()
+	if (!config) return
+	expect(config.compilerOptions).toBeTruthy()
+	expect(config.compilerOptions.baseUrl).toBeFalsy()
+	expect(config.compilerOptions.paths).toBeFalsy()
 })
 
 test("build mappings", async () => {

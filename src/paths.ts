@@ -112,10 +112,6 @@ export function getTsConfig({
 		if (hasError) return undefined
 	}
 
-	if (!compilerOptions.paths || compilerOptions.paths instanceof Array) {
-		compilerOptions.paths = {}
-	}
-
 	const ret: TsConfigPayload = { compilerOptions, fileNames: fileNames.map(path.normalize) }
 
 	if (projectReferences) {
@@ -238,10 +234,6 @@ export function findMatch(moduleName: string, mappings: Mapping[]): Mapping | un
 		}
 	}
 	return matched
-}
-
-export function containNodeModules(str: string) {
-	return str.indexOf(path.sep + "node_modules" + path.sep) !== -1
 }
 
 export function resolveModuleName({

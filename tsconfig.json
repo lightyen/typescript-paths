@@ -4,10 +4,8 @@
     "isolatedModules": true,
     "esModuleInterop": true,
     "noImplicitAny": false,
-    "declaration": true,
-    "emitDeclarationOnly": true,
     "types": ["@types/node", "@types/jest"],
-    "outDir": "types"
+    "outDir": "dist"
   },
   "include": ["src/**/*"]
 }
