@@ -1,8 +1,8 @@
-import ts from "typescript"
 import Module from "module"
 import path from "path"
-import { getTsConfig, TsConfigPayload, createMappings, resolveModuleName } from "./paths"
-import { LogFunc, createLogger, LogLevel, LogLevelString, convertLogLevel } from "./logger"
+import ts from "typescript"
+import { convertLogLevel, createLogger, LogFunc, LogLevel, LogLevelString } from "./logger"
+import { createMappings, getTsConfig, resolveModuleName, TsConfigPayload } from "./paths"
 
 export interface Options {
 	tsConfigPath?: string | string[] | TsConfigPayload | TsConfigPayload[]

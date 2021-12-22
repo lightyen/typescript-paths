@@ -3,6 +3,5 @@
     "strict": true,
     "isolatedModules": true,
     "esModuleInterop": true
-  },
-  "include": ["index.test.ts"]
+  }
 }
