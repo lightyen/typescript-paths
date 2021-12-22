@@ -10,7 +10,7 @@ test("read config", async () => {
 	expect(config).toBeTruthy()
 	const compilerOptions = config!.compilerOptions
 	expect(compilerOptions).toBeTruthy()
-	expect(compilerOptions!.baseUrl).toBeTruthy()
+	expect(compilerOptions!.baseUrl).toBeFalsy()
 	expect(compilerOptions!.paths).toBeTruthy()
 	expect(!(compilerOptions.paths instanceof Array)).toBeTruthy()
 })
@@ -103,7 +103,7 @@ test("support memory tsconfig", async () => {
 	const handler = createHandler({
 		tsConfigPath: {
 			compilerOptions: {
-				baseUrl: path.resolve(__dirname, "t0"),
+				pathsBasePath: path.resolve(__dirname, "t0"),
 				paths: {
 					"~/*": ["./*"],
 					"@xxx/*/xxx": ["./xyz/*/xyz"],

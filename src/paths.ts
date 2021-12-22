@@ -112,10 +112,6 @@ export function getTsConfig({
 		if (hasError) return undefined
 	}
 
-	if (compilerOptions.baseUrl == undefined) {
-		compilerOptions.baseUrl = path.dirname(tsConfigPath)
-	}
-
 	if (!compilerOptions.paths || compilerOptions.paths instanceof Array) {
 		compilerOptions.paths = {}
 	}
@@ -127,7 +123,8 @@ export function getTsConfig({
 		for (const r of projectReferences) {
 			let tsConfigPath = r.path
 			if (!path.isAbsolute(tsConfigPath)) {
-				tsConfigPath = path.resolve(compilerOptions.baseUrl, tsConfigPath)
+				const base = compilerOptions.pathsBasePath as string
+				tsConfigPath = path.resolve(base, tsConfigPath)
 			}
 
 			try {
@@ -271,7 +268,12 @@ export function resolveModuleName({
 
 	for (const target of matched.targets) {
 		const updated = matched.wildcard ? target.replace("*", matchedWildcard) : target
-		const moduleName = path.resolve(compilerOptions.baseUrl!, updated)
+		const base = (
+			compilerOptions.composite
+				? compilerOptions.baseUrl ?? compilerOptions.pathsBasePath
+				: compilerOptions.pathsBasePath
+		) as string
+		const moduleName = path.resolve(base, updated)
 		const ext = path.extname(moduleName)
 		switch (ext) {
 			case ".ts":
