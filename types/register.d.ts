@@ -16,4 +16,3 @@ export declare function register({
 	loggerID,
 	falllback,
 }?: RegisterOptions & OptionFallback): () => void
-export default register

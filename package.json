@@ -46,6 +46,7 @@
   "files": [
     "dist",
     "types",
+    "register.js",
     "LICENSE",
     "README.md"
   ]

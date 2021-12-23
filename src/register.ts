@@ -27,12 +27,15 @@ export function register({
 
 	const originalResolveFilename = Module["_resolveFilename"]
 
-	Module["_resolveFilename"] = function (request: string, parent: Module, ...args: any[]) {
+	Module["_resolveFilename"] = function (request: string, parent?: Module, ...args: any[]) {
+		if (!parent) return originalResolveFilename.apply(this, arguments)
+
 		const moduleName = handler(request, parent.filename)
 		if (moduleName) {
 			log(LogLevel.Debug, `${request} -> ${moduleName}`)
 			return originalResolveFilename.apply(this, [moduleName, parent, ...args])
 		}
+
 		return originalResolveFilename.apply(this, arguments)
 	}
 
@@ -40,5 +43,3 @@ export function register({
 		Module["_resolveFilename"] = originalResolveFilename
 	}
 }
-
-export default register
