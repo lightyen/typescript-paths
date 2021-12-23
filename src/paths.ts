@@ -260,11 +260,7 @@ export function resolveModuleName({
 
 	for (const target of matched.targets) {
 		const updated = matched.wildcard ? target.replace("*", matchedWildcard) : target
-		const base = (
-			compilerOptions.composite
-				? compilerOptions.baseUrl ?? compilerOptions.pathsBasePath
-				: compilerOptions.pathsBasePath
-		) as string
+		const base = (compilerOptions.baseUrl ?? compilerOptions.pathsBasePath) as string
 		const moduleName = path.resolve(base, updated)
 		const ext = path.extname(moduleName)
 		switch (ext) {
