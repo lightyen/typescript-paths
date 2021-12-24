@@ -199,8 +199,8 @@ export function createMappings({
 		mappings.push({
 			wildcard: wildcard !== -1,
 			pattern,
-			prefix: pattern.substr(0, wildcard),
-			suffix: pattern.substr(wildcard + 1),
+			prefix: pattern.substring(0, wildcard),
+			suffix: pattern.substring(wildcard + 1),
 			targets,
 		})
 	}
