@@ -6,6 +6,14 @@
   "main": "dist/index.js",
   "module": "dist/index.mjs",
   "types": "types/index.d.ts",
+  "exports": {
+    ".": {
+      "require": "./dist/index.js",
+      "default": "./dist/esm/index.js"
+    },
+    "./esm": "./dist/esm/index.js",
+    "./esm/loader": "./dist/esm/loader.js"
+  },
   "author": "lightyen",
   "repository": {
     "url": "https://github.com/lightyen/typescript-paths"

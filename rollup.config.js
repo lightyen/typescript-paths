@@ -6,10 +6,10 @@ export default [
 	{
 		input: ["src/index.ts", "src/register.ts"],
 		output: [
-			// {
-			// 	dir: "dist/esm",
-			// 	format: "esm",
-			// },
+			{
+				dir: "dist/esm",
+				format: "esm",
+			},
 			{
 				dir: "dist",
 				format: "cjs",

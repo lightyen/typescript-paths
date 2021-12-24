@@ -1,2 +1,9 @@
 node_modules
-dist
+
+!dist
+dist/*
+!dist/esm
+dist/esm/*
+!dist/esm/loader.js
+!dist/esm/package.json
+!dist/esm/README.md
