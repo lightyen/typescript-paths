@@ -20,7 +20,7 @@ export interface HandlerOptions {
 	log?: LogFunc
 }
 
-function fromTS_NODE_PROJECT(): string | string[] | undefined {
+export function fromTS_NODE_PROJECT() {
 	const env = process.env["TS_NODE_PROJECT"]
 	if (env) {
 		const tsConfigPaths = env.split(path.delimiter).filter(Boolean)

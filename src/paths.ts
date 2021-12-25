@@ -70,15 +70,6 @@ export function getTsConfig({
 				log(LogLevel.Error, error.messageText)
 				hasError = true
 				break
-			case ts.DiagnosticCategory.Warning:
-				log(LogLevel.Warning, error.messageText)
-				break
-			case ts.DiagnosticCategory.Suggestion:
-				log(LogLevel.Info, error.messageText)
-				break
-			case ts.DiagnosticCategory.Message:
-				log(LogLevel.Info, error.messageText)
-				break
 		}
 		if (hasError) return undefined
 	}
@@ -98,15 +89,6 @@ export function getTsConfig({
 					log(LogLevel.Error, error.messageText)
 					hasError = true
 					break
-				case ts.DiagnosticCategory.Warning:
-					log(LogLevel.Warning, error.messageText)
-					break
-				case ts.DiagnosticCategory.Suggestion:
-					log(LogLevel.Info, error.messageText)
-					break
-				case ts.DiagnosticCategory.Message:
-					log(LogLevel.Info, error.messageText)
-					break
 			}
 		}
 		if (hasError) return undefined
@@ -118,11 +100,6 @@ export function getTsConfig({
 		ret.references = []
 		for (const r of projectReferences) {
 			let tsConfigPath = r.path
-			if (!path.isAbsolute(tsConfigPath)) {
-				const base = compilerOptions.pathsBasePath as string
-				tsConfigPath = path.resolve(base, tsConfigPath)
-			}
-
 			try {
 				const stat = fs.lstatSync(tsConfigPath)
 				if (stat.isDirectory()) {
@@ -152,7 +129,6 @@ export function createMappings({
 	respectCoreModule?: boolean
 }): Mapping[] {
 	const countWildcard = (value: string) => value.match(/\*/g)?.length ?? 0
-	const valid = (value: string) => /(\*|\/\*|\/\*\/)/.test(value)
 
 	const mappings: Mapping[] = []
 	for (const pattern of Object.keys(paths)) {
@@ -161,15 +137,11 @@ export function createMappings({
 			continue
 		}
 		const wildcard = pattern.indexOf("*")
-		if (wildcard !== -1 && !valid(pattern)) {
-			log(LogLevel.Warning, `path pattern '${pattern}' is not valid.`)
-			continue
-		}
 		if (respectCoreModule) {
 			for (const key in coreModules) {
 				if (pattern.startsWith(key)) {
-					log(LogLevel.Warning, `path pattern core modules like '${pattern}' is ignored.`)
-					log(LogLevel.Info, `(${key}) ${coreModules[key]}`)
+					log(LogLevel.Warning, `path pattern '${pattern}' is ignored.`)
+					log(LogLevel.Info, `respect core module '${key}': ${coreModules[key]}`)
 					continue
 				}
 			}
@@ -180,11 +152,6 @@ export function createMappings({
 					LogLevel.Warning,
 					`Substitution '${target}' in pattern '${pattern}' can have at most one '*' character.`,
 				)
-				return false
-			}
-			const wildcard = target.indexOf("*")
-			if (wildcard !== -1 && !valid(target)) {
-				log(LogLevel.Warning, `target pattern '${target}' is not valid`)
 				return false
 			}
 			return true

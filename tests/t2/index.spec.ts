@@ -1,6 +1,6 @@
 import { existsSync } from "fs"
 import path from "path"
-import { createHandler } from "../../src"
+import { createHandler, createLogger, LogLevel } from "../../src"
 
 test("support project references", async () => {
 	const handler = createHandler({
@@ -21,4 +21,13 @@ test("support project references", async () => {
 	expect(handler("img/pic.svg", path.resolve(__dirname, "shared2/foo.ts"))).toEqual(
 		path.resolve(__dirname, "shared2/pic.svg"),
 	)
+})
+
+test("bad tsconfig", async () => {
+	const handler = createHandler({
+		log: createLogger({ logLevel: LogLevel.None }),
+		falllback: moduleName => (existsSync(moduleName) ? moduleName : undefined),
+		tsConfigPath: path.resolve(__dirname, "app/bad.tsconfig.json"),
+	})
+	expect(handler).toBeFalsy()
 })

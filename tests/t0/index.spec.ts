@@ -4,8 +4,8 @@ import { createHandler } from "../../src"
 test("resolving", async () => {
 	const handler = createHandler({ tsConfigPath: path.resolve(__dirname, "tsconfig.json") })
 	expect(handler).toBeTruthy()
-
-	const resolve = (request: string) => handler!(request, path.resolve(__dirname, "demo.ts"))
+	if (!handler) return
+	const resolve = (request: string) => handler(request, path.resolve(__dirname, "demo.ts"))
 	expect(resolve("~/hello")).toEqual(path.resolve(__dirname, "hello.ts"))
 	expect(resolve("~/qqq/hello")).toEqual(require.resolve(path.join(__dirname, "qqq/hello.js")))
 	expect(resolve("@xxx/abc/xxx")).toEqual(path.resolve(__dirname, "xyz/abc/xyz.ts"))

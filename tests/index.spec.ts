@@ -1,11 +1,12 @@
 import path from "path"
-import { createHandler, createMappings, findMatch, getTsConfig } from "../src"
+import { createHandler, createMappings, findMatch, fromTS_NODE_PROJECT, getTsConfig } from "../src"
 import { createLogger, LogLevel } from "../src/logger"
 
-const log = createLogger({ logLevel: LogLevel.None })
-
 test("read bad config", async () => {
-	const config = getTsConfig({ log, tsConfigPath: path.resolve(__dirname, "bad.tsconfig.json") })
+	const config = getTsConfig({
+		log: createLogger({ logLevel: LogLevel.None }),
+		tsConfigPath: path.resolve(__dirname, "bad.tsconfig.json"),
+	})
 	expect(config).toBeTruthy()
 	if (!config) return
 	expect(config.compilerOptions).toBeTruthy()
@@ -13,9 +14,28 @@ test("read bad config", async () => {
 	expect(config.compilerOptions.paths).toBeFalsy()
 })
 
+test("read bad config 2", async () => {
+	const log = createLogger({ logLevel: LogLevel.None })
+	let config = getTsConfig({
+		log,
+		tsConfigPath: path.resolve(__dirname, "bad2.tsconfig.json"),
+	})
+	expect(config).toBeFalsy()
+	config = getTsConfig({ log, tsConfigPath: path.resolve(__dirname, "config.json") })
+	expect(config).toBeFalsy()
+})
+
+test("read bad config 3", async () => {
+	const log = createLogger({ logLevel: LogLevel.None })
+	const handler = createHandler({
+		log,
+		tsConfigPath: path.resolve(__dirname, "bad3.tsconfig.json"),
+	})
+	expect(handler).toBeTruthy()
+})
+
 test("build mappings", async () => {
 	let mappings = createMappings({
-		log,
 		paths: {
 			"~/*": ["*"],
 			"abc/*": ["xxx/*"],
@@ -49,7 +69,6 @@ test("build mappings", async () => {
 
 	// 3. match the first pattern
 	mappings = createMappings({
-		log,
 		paths: {
 			"~/*": ["./*"],
 			"abc/*": ["xxx/*"],
@@ -66,7 +85,7 @@ test("build mappings", async () => {
 
 	// 2. invalid pattern
 	mappings = createMappings({
-		log,
+		log: createLogger({ logLevel: LogLevel.None }),
 		respectCoreModule: true,
 		paths: {
 			"~/**/*": ["./*"],
@@ -108,4 +127,11 @@ test("support multiple tsconfig", async () => {
 
 	expect(resolveT1("~hu/hello")).toEqual(path.resolve(__dirname, "t1", "he/hello.ts"))
 	expect(resolveT0("~hu/hello")).toEqual(undefined)
+})
+
+test("fromTS_NODE_PROJECT", () => {
+	process.env.TS_NODE_PROJECT = ""
+	expect(fromTS_NODE_PROJECT()).toEqual(undefined)
+	process.env.TS_NODE_PROJECT = "common/tsconfig.json"
+	expect(fromTS_NODE_PROJECT()).toEqual(["common/tsconfig.json"])
 })

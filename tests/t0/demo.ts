@@ -7,12 +7,17 @@ import { hello as h } from "~/qqq/hello"
 import xx from "@q"
 
 import { normalize } from "@p"
+normalize
 // @ts-expect-error
 import { escape } from "@p"
 
 import { setV } from "#v"
-
 hello()
 h(2)
 doSomething("/*/*/")
 console.log(COUNT)
+xyz
+rollup
+xx
+setV
+escape

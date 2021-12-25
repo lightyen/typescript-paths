@@ -1,0 +1,11 @@
+{
+  "compilerOptions": {
+    "strict": true,
+    "paths": {
+      "fs/*": [],
+      "qq*": ["./src/*"],
+      "test/*": ["./src/**/*"],
+      "lib/**/*": []
+    }
+  }
+}
