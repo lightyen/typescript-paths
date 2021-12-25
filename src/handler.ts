@@ -45,7 +45,7 @@ export function createHandler({
 	}
 
 	function addServices(config: TsConfigPayload) {
-		const { compilerOptions, fileNames = [], references } = config
+		const { compilerOptions, fileNames, references } = config
 		if (!compilerOptions.paths || compilerOptions.paths instanceof Array) return
 		services.push({
 			compilerOptions,

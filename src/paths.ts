@@ -49,7 +49,7 @@ export interface Mapping {
 
 export interface TsConfigPayload {
 	compilerOptions: ts.CompilerOptions
-	fileNames?: string[]
+	fileNames: string[]
 	references?: TsConfigPayload[]
 }
 
@@ -156,7 +156,7 @@ export function createMappings({
 			}
 			return true
 		})
-		if (targets.length == 0) {
+		if (targets.length === 0) {
 			continue
 		}
 		if (pattern === "*") {
@@ -186,7 +186,7 @@ export function isPatternMatch(prefix: string, suffix: string, candidate: string
 }
 
 export function findMatch(moduleName: string, mappings: Mapping[]): Mapping | undefined {
-	let longestMatchedPrefixLength = 0
+	let longestMatchedPrefixLength = -1
 	let matched: Mapping | undefined
 	for (const mapping of mappings) {
 		const { wildcard, prefix, suffix, pattern } = mapping

@@ -31,3 +31,8 @@ test("bad tsconfig", async () => {
 	})
 	expect(handler).toBeFalsy()
 })
+
+test("none", async () => {
+	const handler = createHandler()
+	expect(handler).toBeTruthy()
+})

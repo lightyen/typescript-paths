@@ -19,6 +19,9 @@ test("resolving", async () => {
 	expect(resolve("@q")).toEqual(path.resolve(__dirname, "xx/ee.ts"))
 	expect(resolve("#v")).toEqual(path.resolve(__dirname, "xx/vv.abs.ts"))
 	expect(resolve("@v")).toEqual(path.resolve(__dirname, "xx/vv.abs.ts"))
+	expect(resolve("ee")).toEqual(path.resolve(__dirname, "xx/ee.ts"))
+	expect(resolve("ff")).toEqual(path.resolve(__dirname, "xx/ff.ts"))
+	expect(resolve("path")).toBeFalsy()
 })
 
 test("support memory tsconfig", async () => {
