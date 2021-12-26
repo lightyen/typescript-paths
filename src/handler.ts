@@ -15,21 +15,17 @@ interface Service {
 }
 
 export interface HandlerOptions {
+	/** Specifies the path to tsconfig.json */
 	tsConfigPath?: string | TsConfigPayload | Array<string | TsConfigPayload>
-	respectCoreModule?: boolean
 	/** The directory where the tsconfig is stored */
-	searchPath?: string
+	searchPath?: string | string[]
+	respectCoreModule?: boolean
 	log?: LogFunc
 }
 
 export function fromTS_NODE_PROJECT() {
 	const env = process.env["TS_NODE_PROJECT"]
-	if (env) {
-		const tsConfigPaths = env.split(path.delimiter).filter(Boolean)
-		if (tsConfigPaths.length > 0) {
-			return tsConfigPaths
-		}
-	}
+	if (env) return env.split(path.delimiter).filter(Boolean)
 	return undefined
 }
 
@@ -41,7 +37,13 @@ export function createHandler({
 	falllback,
 }: HandlerOptions & OptionFallback = {}) {
 	if (!tsConfigPath) {
-		tsConfigPath = ts.findConfigFile(searchPath || ".", ts.sys.fileExists) || "tsconfig.json"
+		if (searchPath && searchPath instanceof Array) {
+			tsConfigPath = searchPath
+				.map(p => ts.findConfigFile(p, ts.sys.fileExists))
+				.filter((v: string | undefined): v is string => Boolean(v))
+		} else {
+			tsConfigPath = ts.findConfigFile(searchPath || ts.sys.getCurrentDirectory(), ts.sys.fileExists) || []
+		}
 	}
 
 	const services: Service[] = []
@@ -101,13 +103,16 @@ export function createHandler({
 			const { compilerOptions, cache, fileNames, mappings } = srv
 			const exist = cache.get(importer)
 			if (exist !== undefined) {
-				cache.delete(request)
-				cache.set(request, exist)
+				cache.delete(importer)
+				cache.set(importer, exist)
 				if (!exist) return undefined
 			} else if (fileNames.indexOf(importer) === -1) {
 				if (cache.size === 1 << 8) cache.delete(cache.keys().next().value)
 				cache.set(importer, false)
 				return undefined
+			} else {
+				if (cache.size === 1 << 8) cache.delete(cache.keys().next().value)
+				cache.set(importer, true)
 			}
 			return resolveModuleName({
 				compilerOptions,

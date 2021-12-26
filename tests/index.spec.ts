@@ -2,6 +2,17 @@ import path from "path"
 import { createHandler, createMappings, findMatch, fromTS_NODE_PROJECT, getTsConfig } from "../src"
 import { createLogger, LogLevel } from "../src/logger"
 
+test("read config", async () => {
+	const config = getTsConfig({
+		tsConfigPath: path.resolve(__dirname, "tsconfig.json"),
+	})
+	expect(config).toBeTruthy()
+	if (!config) return
+	expect(config.compilerOptions).toBeTruthy()
+	expect(config.compilerOptions.baseUrl).toBeFalsy()
+	expect(config.compilerOptions.paths).toBeFalsy()
+})
+
 test("read bad config", async () => {
 	const config = getTsConfig({
 		log: createLogger({ logLevel: LogLevel.None }),
@@ -97,11 +108,7 @@ test("build mappings", async () => {
 })
 
 test("support multiple tsconfig", async () => {
-	process.env["TS_NODE_PROJECT"] = [
-		path.resolve(__dirname, "t0/tsconfig.json"),
-		path.resolve(__dirname, "t1/tsconfig.json"),
-	].join(path.delimiter)
-	const handler = createHandler({})
+	const handler = createHandler({ searchPath: [path.resolve(__dirname, "t0"), path.resolve(__dirname, "t1")] })
 	expect(handler).toBeTruthy()
 
 	const resolveT0 = (request: string) => handler!(request, path.resolve(__dirname, "t0", "demo.ts"))
@@ -134,4 +141,13 @@ test("fromTS_NODE_PROJECT", () => {
 	expect(fromTS_NODE_PROJECT()).toEqual(undefined)
 	process.env.TS_NODE_PROJECT = "common/tsconfig.json"
 	expect(fromTS_NODE_PROJECT()).toEqual(["common/tsconfig.json"])
+	process.env.TS_NODE_PROJECT = ""
+})
+
+test("none", async () => {
+	expect(createHandler()).toBeTruthy()
+})
+
+test("invalid", async () => {
+	expect(createHandler({ searchPath: path.join(__dirname, "undefined") })).toBeTruthy()
 })
