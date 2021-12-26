@@ -2,7 +2,7 @@ import path from "path"
 import { createHandler } from "../../src"
 
 test("resolving", async () => {
-	const handler = createHandler({ tsConfigPath: path.resolve(__dirname, "tsconfig.json") })
+	const handler = createHandler({ searchPath: __dirname })
 	expect(handler).toBeTruthy()
 	if (!handler) return
 	const resolve = (request: string) => handler(request, path.resolve(__dirname, "demo.ts"))

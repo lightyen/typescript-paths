@@ -17,6 +17,8 @@ interface Service {
 export interface HandlerOptions {
 	tsConfigPath?: string | TsConfigPayload | Array<string | TsConfigPayload>
 	respectCoreModule?: boolean
+	/** The directory where the tsconfig is stored */
+	searchPath?: string
 	log?: LogFunc
 }
 
@@ -32,11 +34,16 @@ export function fromTS_NODE_PROJECT() {
 }
 
 export function createHandler({
-	tsConfigPath = fromTS_NODE_PROJECT() || ts.findConfigFile(".", ts.sys.fileExists) || "tsconfig.json",
+	searchPath,
+	tsConfigPath = fromTS_NODE_PROJECT(),
 	respectCoreModule = true,
 	log = createLogger(),
 	falllback,
 }: HandlerOptions & OptionFallback = {}) {
+	if (!tsConfigPath) {
+		tsConfigPath = ts.findConfigFile(searchPath || ".", ts.sys.fileExists) || "tsconfig.json"
+	}
+
 	const services: Service[] = []
 	if (typeof tsConfigPath === "string") {
 		tsConfigPath = [tsConfigPath]
