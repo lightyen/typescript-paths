@@ -44,7 +44,7 @@ export interface Mapping {
 }
 export interface TsConfigPayload {
 	compilerOptions: ts.CompilerOptions
-	fileNames?: string[]
+	fileNames: string[]
 	references?: TsConfigPayload[]
 }
 export declare function getTsConfig({
