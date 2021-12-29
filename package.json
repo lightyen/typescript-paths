@@ -8,8 +8,7 @@
   "types": "types/index.d.ts",
   "exports": {
     ".": {
-      "require": "./dist/index.js",
-      "default": "./dist/esm/index.js"
+      "node": "./dist/index.js"
     },
     "./esm": "./dist/esm/index.js",
     "./esm/loader": "./dist/esm/loader.js"
@@ -24,8 +23,8 @@
     "test": "jest",
     "build": "rollup -c",
     "format": "prettier --config .prettierrc.yml --write {src,tests,types}/**/*",
-    "prepare": "yarn test && yarn build && yarn types && yarn format",
-    "doit": "yarn upgrade-interactive --latest"
+    "prepare": "pnpm test && pnpm build && pnpm types && pnpm format",
+    "doit": "pnpm update --interactive --latest"
   },
   "keywords": [
     "typescript",
@@ -36,18 +35,18 @@
     "typescript": "^4.1.2"
   },
   "devDependencies": {
-    "@babel/core": "7.15.8",
-    "@babel/preset-env": "7.15.8",
-    "@babel/preset-typescript": "7.15.0",
+    "@babel/core": "7.16.5",
+    "@babel/preset-env": "7.16.5",
+    "@babel/preset-typescript": "7.16.5",
     "@rollup/plugin-babel": "5.3.0",
     "@rollup/plugin-commonjs": "21.0.1",
-    "@rollup/plugin-node-resolve": "13.0.6",
-    "@types/jest": "27.0.2",
+    "@rollup/plugin-node-resolve": "13.1.1",
+    "@types/jest": "27.0.3",
     "@types/node": "^16.11.6",
-    "jest": "27.3.1",
-    "prettier": "2.4.1",
-    "rollup": "2.58.3",
-    "ts-jest": "27.0.7",
+    "jest": "27.4.5",
+    "prettier": "2.5.1",
+    "rollup": "2.62.0",
+    "ts-jest": "27.1.2",
     "ts-node": "10.4.0",
     "typescript": "4.5.4"
   },
