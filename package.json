@@ -1,38 +1,15 @@
 {
-  "name": "typescript-paths",
-  "version": "1.2.5",
-  "description": "Resolving tsconfig paths in runtime",
-  "license": "MIT",
-  "main": "dist/index.js",
-  "module": "dist/index.mjs",
-  "types": "types/index.d.ts",
-  "exports": {
-    ".": {
-      "node": "./dist/index.js"
-    },
-    "./esm": "./dist/esm/index.js",
-    "./esm/loader": "./dist/esm/loader.js"
-  },
-  "author": "lightyen",
-  "repository": {
-    "url": "https://github.com/lightyen/typescript-paths"
-  },
-  "homepage": "https://github.com/lightyen/typescript-paths#readme",
+  "name": "typescript-monorepo",
+  "private": true,
   "scripts": {
-    "types": "tsc --project tsconfig.json --declaration --emitDeclarationOnly --outDir types",
     "test": "jest",
-    "build": "rollup -c",
-    "format": "prettier --config .prettierrc.yml --write {src,tests,types}/**/*",
-    "prepare": "pnpm test && pnpm build && pnpm types && pnpm format",
+    "build-core": "cd packages/typescript-paths && npm run build",
+    "build-webpack-plugin": "cd packages/ts-paths-resolve-plugin && npm run build",
+    "build-rollup-plugin": "cd packages/rollup-plugin-tsconfig-paths && npm run build",
+    "build-vite-plugin": "cd packages/vite-plugin-tsconfig-paths && npm run build",
+    "format": "prettier --config .prettierrc.yml --write packages/**/index.ts packages/**/{src,tests,types}/**/*",
+    "build": "npm run build-core && npm run build-webpack-plugin && npm run build-rollup-plugin && npm run build-vite-plugin && npm run format",
     "doit": "pnpm update --interactive --latest"
-  },
-  "keywords": [
-    "typescript",
-    "tsconfig",
-    "paths"
-  ],
-  "peerDependencies": {
-    "typescript": "^4.1.2"
   },
   "devDependencies": {
     "@babel/core": "7.16.5",
@@ -50,11 +27,7 @@
     "ts-node": "10.4.0",
     "typescript": "4.5.4"
   },
-  "files": [
-    "dist",
-    "types",
-    "register.js",
-    "LICENSE",
-    "README.md"
-  ]
+  "pnpm": {
+    "overrides": {}
+  }
 }

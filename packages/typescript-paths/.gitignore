@@ -1,0 +1,9 @@
+node_modules
+
+!lib
+lib/*
+!lib/esm
+lib/esm/*
+!lib/esm/loader.js
+!lib/esm/package.json
+!lib/esm/README.md

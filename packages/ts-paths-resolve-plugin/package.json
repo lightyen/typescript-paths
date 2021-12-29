@@ -1,0 +1,47 @@
+{
+  "name": "ts-paths-resolve-plugin",
+  "version": "5.5.3",
+  "description": "A webpack resolve plugin for tsconfig-paths",
+  "license": "MIT",
+  "types": "types/index.d.ts",
+  "main": "./lib/index.js",
+  "module": "./lib/esm/index.js",
+  "exports": {
+    ".": {
+      "node": "./lib/index.js"
+    },
+    "./esm": "./lib/esm/index.js"
+  },
+  "author": "lightyen",
+  "repository": {
+    "url": "https://github.com/lightyen/typescript-paths"
+  },
+  "homepage": "https://github.com/lightyen/typescript-paths/packages/ts-paths-resolve-plugin#readme",
+  "scripts": {
+    "types": "tsc --project tsconfig.json --declaration --emitDeclarationOnly --outDir types",
+    "compile": "rollup -c",
+    "build": "npm run compile && npm run types"
+  },
+  "dependencies": {
+    "typescript-paths": "^1.2.5"
+  },
+  "peerDependencies": {
+    "webpack": "^5"
+  },
+  "devDependencies": {
+    "webpack": "^5"
+  },
+  "keywords": [
+    "webpack",
+    "plugin",
+    "typescript",
+    "paths",
+    "resolve"
+  ],
+  "files": [
+    "lib",
+    "types",
+    "LICENSE",
+    "README.md"
+  ]
+}

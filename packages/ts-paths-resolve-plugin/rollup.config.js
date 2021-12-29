@@ -4,17 +4,16 @@ import nodeResolve from "@rollup/plugin-node-resolve"
 
 export default [
 	{
-		input: ["src/index.ts", "src/register.ts"],
+		input: "index.ts",
 		output: [
 			{
-				dir: "dist/esm",
-				format: "esm",
-			},
-			{
-				dir: "dist",
+				file: "lib/index.js",
 				format: "cjs",
 				exports: "named",
-				chunkFileNames: "[hash].js",
+			},
+			{
+				file: "lib/esm/index.js",
+				format: "esm",
 			},
 		],
 		plugins: [
@@ -23,9 +22,9 @@ export default [
 				extensions: [".js", ".ts"],
 				exclude: "node_modules/**",
 			}),
-			nodeResolve({ extensions: [".ts"] }),
+			nodeResolve({ extensions: [".js", ".ts"] }),
 			commonjs(),
 		],
-		external: ["fs", "path", "typescript"],
+		external: ["fs", "path", "typescript", "typescript-paths"],
 	},
 ]

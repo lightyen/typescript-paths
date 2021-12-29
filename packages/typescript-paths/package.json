@@ -1,0 +1,44 @@
+{
+  "name": "typescript-paths",
+  "version": "1.2.5",
+  "description": "Resolving tsconfig paths in runtime",
+  "license": "MIT",
+  "main": "./lib/index.js",
+  "module": "./lib/index.mjs",
+  "types": "types/index.d.ts",
+  "exports": {
+    ".": {
+      "node": "./lib/index.js"
+    },
+    "./register": {
+      "node": "./register.js"
+    },
+    "./esm": "./lib/esm/index.js",
+    "./esm/loader": "./lib/esm/loader.js"
+  },
+  "author": "lightyen",
+  "repository": {
+    "url": "https://github.com/lightyen/typescript-paths"
+  },
+  "homepage": "https://github.com/lightyen/typescript-paths#readme",
+  "scripts": {
+    "types": "tsc --project tsconfig.json --declaration --emitDeclarationOnly --outDir types",
+    "compile": "rollup -c",
+    "build": "npm run compile && npm run types"
+  },
+  "keywords": [
+    "typescript",
+    "tsconfig",
+    "paths"
+  ],
+  "peerDependencies": {
+    "typescript": "^4.1.2"
+  },
+  "files": [
+    "lib",
+    "types",
+    "register.js",
+    "LICENSE",
+    "README.md"
+  ]
+}

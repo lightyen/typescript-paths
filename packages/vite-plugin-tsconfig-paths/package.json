@@ -1,0 +1,46 @@
+{
+  "name": "vite-plugin-tsconfig-paths",
+  "version": "1.0.1",
+  "description": "Vite plugin for resolving tsconfig paths",
+  "license": "MIT",
+  "types": "types/index.d.ts",
+  "main": "./lib/index.js",
+  "module": "./lib/esm/index.js",
+  "exports": {
+    ".": {
+      "node": "./lib/index.js"
+    },
+    "./esm": "./lib/esm/index.js"
+  },
+  "author": "lightyen",
+  "repository": {
+    "url": "https://github.com/lightyen/vite-plugin-tsconfig-paths"
+  },
+  "scripts": {
+    "types": "tsc --project tsconfig.json --declaration --emitDeclarationOnly --outDir types",
+    "compile": "rollup -c",
+    "build": "npm run compile && npm run types"
+  },
+  "keywords": [
+    "vite",
+    "plugin",
+    "typescript",
+    "tsconfig",
+    "paths"
+  ],
+  "dependencies": {
+    "typescript-paths": "^1.2.5"
+  },
+  "devDependencies": {
+    "vite": "*"
+  },
+  "peerDependencies": {
+    "vite": "*"
+  },
+  "files": [
+    "lib",
+    "types",
+    "LICENSE",
+    "README.md"
+  ]
+}
