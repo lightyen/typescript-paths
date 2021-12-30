@@ -1,0 +1,19 @@
+{
+  "name": "webpack-demo",
+  "private": true,
+  "scripts": {
+    "build": "webpack --config webpack.config.js"
+  },
+  "devDependencies": {
+    "@babel/core": "7.16.5",
+    "@babel/plugin-transform-runtime": "^7.16.5",
+    "@babel/preset-env": "7.16.5",
+    "@babel/preset-typescript": "7.16.5",
+    "@babel/runtime": "^7.16.5",
+    "babel-loader": "^8.2.3",
+    "clean-webpack-plugin": "^4.0.0",
+    "ts-paths-resolve-plugin": "../../packages/ts-paths-resolve-plugin",
+    "webpack": "^5.65.0",
+    "webpack-cli": "^4.9.1"
+  }
+}

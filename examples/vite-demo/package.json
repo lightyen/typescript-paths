@@ -1,0 +1,11 @@
+{
+  "name": "vite-demo",
+  "private": true,
+  "scripts": {
+    "build": "vite build"
+  },
+  "devDependencies": {
+    "vite": "^2.7.9",
+    "vite-plugin-tsconfig-paths": "../../packages/vite-plugin-tsconfig-paths"
+  }
+}

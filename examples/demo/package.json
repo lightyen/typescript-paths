@@ -1,0 +1,11 @@
+{
+  "name": "demo",
+  "scripts": {
+    "start": "ts-node -r typescript-paths/register main.ts"
+  },
+  "devDependencies": {
+    "@swc/core": "^1.2.124",
+    "ts-node": "10.4.0",
+    "typescript-paths": "../../packages/typescript-paths"
+  }
+}
