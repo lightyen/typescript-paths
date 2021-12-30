@@ -1,6 +1,6 @@
 {
   "name": "rollup-plugin-tsconfig-paths",
-  "version": "1.1.4",
+  "version": "1.1.5",
   "description": "Rollup plugin for resolving tsconfig paths",
   "license": "MIT",
   "types": "types/index.d.ts",
@@ -16,7 +16,7 @@
   "repository": {
     "url": "https://github.com/lightyen/typescript-paths"
   },
-  "homepage": "https://github.com/lightyen/typescript-paths/packages/rollup-plugin-tsconfig-paths#readme",
+  "homepage": "https://github.com/lightyen/typescript-paths/blob/main/packages/rollup-plugin-tsconfig-paths#readme",
   "scripts": {
     "types": "tsc --project tsconfig.json --declaration --emitDeclarationOnly --outDir types",
     "compile": "rollup -c",
@@ -31,7 +31,7 @@
     "paths"
   ],
   "dependencies": {
-    "typescript-paths": "^1.2.5"
+    "typescript-paths": "^1.2.6"
   },
   "peerDependencies": {
     "rollup": "^2"

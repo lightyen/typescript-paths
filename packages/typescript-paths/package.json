@@ -1,6 +1,6 @@
 {
   "name": "typescript-paths",
-  "version": "1.2.5",
+  "version": "1.2.6",
   "description": "Resolving tsconfig paths in runtime",
   "license": "MIT",
   "main": "./lib/index.js",
@@ -20,7 +20,7 @@
   "repository": {
     "url": "https://github.com/lightyen/typescript-paths"
   },
-  "homepage": "https://github.com/lightyen/typescript-paths#readme",
+  "homepage": "https://github.com/lightyen/typescript-paths/blob/main/packages/typescript-paths#readme",
   "scripts": {
     "types": "tsc --project tsconfig.json --declaration --emitDeclarationOnly --outDir types",
     "compile": "rollup -c",
