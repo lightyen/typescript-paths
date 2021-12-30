@@ -8,7 +8,7 @@
     "build-rollup-plugin": "cd packages/rollup-plugin-tsconfig-paths && npm run build",
     "build-vite-plugin": "cd packages/vite-plugin-tsconfig-paths && npm run build",
     "format": "prettier --config .prettierrc.yml --write packages/**/index.ts packages/**/{src,tests,types}/**/*",
-    "build": "npm run build-core && npm run build-webpack-plugin && npm run build-rollup-plugin && npm run build-vite-plugin && npm run format",
+    "build": "npm run build-core && npm run build-webpack-plugin && npm run build-rollup-plugin && npm run build-vite-plugin",
     "doit": "pnpm update --interactive --latest"
   },
   "devDependencies": {
