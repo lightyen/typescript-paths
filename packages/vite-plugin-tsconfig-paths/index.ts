@@ -1,8 +1,8 @@
-import type { Plugin } from "vite"
-import ts from "typescript"
 import fs from "fs"
+import ts from "typescript"
 import type { RegisterOptions } from "typescript-paths"
 import { convertLogLevel, createHandler, createLogger, LogLevel } from "typescript-paths"
+import type { Plugin } from "vite"
 
 const PLUGIN_NAME = "tsconfig-paths"
 
@@ -14,7 +14,8 @@ export function tsConfigPaths({
 	logLevel = "info",
 	colors = true,
 }: PluginOptions = {}): Plugin {
-	let log: ReturnType<typeof createLogger>
+	const log = createLogger({ logLevel: convertLogLevel(logLevel), colors, ID: PLUGIN_NAME })
+	log(LogLevel.Debug, `typescript version: ${ts.version}`)
 	let handler: ReturnType<typeof createHandler>
 	let root = ""
 	return {
@@ -22,8 +23,6 @@ export function tsConfigPaths({
 		enforce: "pre",
 		configResolved(config) {
 			root = config.root
-			log = createLogger({ logLevel: convertLogLevel(logLevel), colors, ID: PLUGIN_NAME })
-			log(LogLevel.Debug, `typescript version: ${ts.version}`)
 			handler = createHandler({
 				log,
 				tsConfigPath,
