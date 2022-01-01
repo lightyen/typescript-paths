@@ -1,4 +1,5 @@
 import fs from "fs"
+import path from "path"
 import ts from "typescript"
 import type { RegisterOptions } from "typescript-paths"
 import { convertLogLevel, createHandler, createLogger, LogLevel } from "typescript-paths"
@@ -55,7 +56,7 @@ export function tsConfigPaths({
 				request = request.slice(0, m.index)
 			}
 
-			const moduleName = handler?.(request, importer)
+			const moduleName = handler?.(request, path.normalize(importer))
 			if (!moduleName) {
 				return this.resolve(request + suffix, importer, {
 					skipSelf: true,
