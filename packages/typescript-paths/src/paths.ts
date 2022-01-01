@@ -216,7 +216,7 @@ export function resolveModuleName({
 	request: string
 	importer: string
 	host: ts.ModuleResolutionHost
-	falllback?: (moduleName: string) => string | undefined
+	falllback?: (moduleName: string) => boolean
 }): string | undefined {
 	const matched = findMatch(request, mappings)
 	if (!matched) {
@@ -242,9 +242,7 @@ export function resolveModuleName({
 		if (result?.resolvedModule) {
 			return path.normalize(result.resolvedModule.resolvedFileName)
 		}
-		if (falllback?.(moduleName)) {
-			return moduleName
-		}
+		if (falllback?.(moduleName)) return moduleName
 	}
 
 	return undefined

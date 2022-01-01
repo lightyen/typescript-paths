@@ -80,5 +80,5 @@ export declare function resolveModuleName({
 	request: string
 	importer: string
 	host: ts.ModuleResolutionHost
-	falllback?: (moduleName: string) => string | undefined
+	falllback?: (moduleName: string) => boolean
 }): string | undefined

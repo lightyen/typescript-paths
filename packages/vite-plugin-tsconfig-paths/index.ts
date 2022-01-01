@@ -29,7 +29,7 @@ export function tsConfigPaths({
 				tsConfigPath,
 				respectCoreModule,
 				searchPath: root,
-				falllback: moduleName => (fs.existsSync(moduleName) ? moduleName : undefined),
+				falllback: moduleName => fs.existsSync(moduleName),
 			})
 		},
 		handleHotUpdate(ctx) {
@@ -39,7 +39,7 @@ export function tsConfigPaths({
 					tsConfigPath,
 					respectCoreModule,
 					searchPath: root,
-					falllback: moduleName => (fs.existsSync(moduleName) ? moduleName : undefined),
+					falllback: moduleName => fs.existsSync(moduleName),
 				})
 			}
 		},

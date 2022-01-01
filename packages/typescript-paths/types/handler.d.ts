@@ -1,7 +1,7 @@
 import { LogFunc } from "./logger"
 import { TsConfigPayload } from "./paths"
 export interface OptionFallback {
-	falllback?: (moduleName: string) => string | undefined
+	falllback?: (moduleName: string) => boolean
 }
 export interface HandlerOptions {
 	/** Specifies the path to tsconfig.json */

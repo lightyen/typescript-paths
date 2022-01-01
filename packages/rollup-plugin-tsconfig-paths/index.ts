@@ -25,7 +25,7 @@ export function tsConfigPaths({
 				log,
 				tsConfigPath,
 				respectCoreModule,
-				falllback: moduleName => (fs.existsSync(moduleName) ? moduleName : undefined),
+				falllback: moduleName => fs.existsSync(moduleName),
 			})
 			return
 		},

@@ -34,7 +34,7 @@ export class TsPathsResolvePlugin {
 			tsConfigPath,
 			log: this.log,
 			respectCoreModule,
-			falllback: moduleName => (fs.existsSync(moduleName) ? moduleName : undefined),
+			falllback: moduleName => fs.existsSync(moduleName),
 		})
 	}
 	apply(compiler: Compiler) {

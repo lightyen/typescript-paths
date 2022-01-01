@@ -4,7 +4,7 @@ import { createLogger, LogFunc, LogLevel } from "./logger"
 import { createMappings, getTsConfig, resolveModuleName, TsConfigPayload } from "./paths"
 
 export interface OptionFallback {
-	falllback?: (moduleName: string) => string | undefined
+	falllback?: (moduleName: string) => boolean
 }
 
 interface Service {

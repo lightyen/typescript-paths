@@ -4,7 +4,7 @@ import { createHandler, createLogger, LogLevel } from "../../src"
 
 test("support project references", async () => {
 	const handler = createHandler({
-		falllback: moduleName => (existsSync(moduleName) ? moduleName : undefined),
+		falllback: moduleName => existsSync(moduleName),
 		tsConfigPath: path.resolve(__dirname, "app/tsconfig.json"),
 	})
 	expect(handler).toBeTruthy()
@@ -26,7 +26,7 @@ test("support project references", async () => {
 test("bad tsconfig", async () => {
 	const handler = createHandler({
 		log: createLogger({ logLevel: LogLevel.None }),
-		falllback: moduleName => (existsSync(moduleName) ? moduleName : undefined),
+		falllback: moduleName => existsSync(moduleName),
 		tsConfigPath: path.resolve(__dirname, "app/bad.tsconfig.json"),
 	})
 	expect(handler).toBeFalsy()
