@@ -1,6 +1,5 @@
 const path = require("path")
 const glob = require("glob")
-const { CleanWebpackPlugin } = require("clean-webpack-plugin")
 const { TsPathsResolvePlugin } = require("ts-paths-resolve-plugin")
 
 const src = path.join(__dirname, "src")
@@ -12,10 +11,10 @@ const config = {
 	output: {
 		path: path.join(__dirname, "build"),
 		filename: "js/[name].js?[fullhash]",
+		clean: true,
 	},
 	plugins: [
 		new TsPathsResolvePlugin({ tsConfigPath: "src/tsconfig.json" }),
-		new CleanWebpackPlugin({ cleanOnceBeforeBuildPatterns: "**/*" }),
 	],
 	module: {
 		rules: [{ test: /\.(j|t)s?/, loader: "babel-loader" }],
