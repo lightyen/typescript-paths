@@ -9,12 +9,13 @@ export default [
 			{
 				dir: "lib/esm",
 				format: "esm",
+				chunkFileNames: "core.js",
 			},
 			{
 				dir: "lib",
 				format: "cjs",
 				exports: "named",
-				chunkFileNames: "[hash].js",
+				chunkFileNames: "core.js",
 			},
 		],
 		plugins: [
