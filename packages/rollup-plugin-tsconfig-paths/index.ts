@@ -1,6 +1,6 @@
+import fs from "fs"
 import type { Plugin } from "rollup"
 import ts from "typescript"
-import fs from "fs"
 import type { RegisterOptions } from "typescript-paths"
 import { convertLogLevel, createHandler, createLogger, LogLevel } from "typescript-paths"
 
@@ -11,7 +11,7 @@ export type PluginOptions = Omit<RegisterOptions, "loggerID">
 export function tsConfigPaths({
 	tsConfigPath,
 	respectCoreModule,
-	logLevel = "info",
+	logLevel,
 	colors = true,
 }: PluginOptions = {}): Plugin {
 	let log: ReturnType<typeof createLogger>

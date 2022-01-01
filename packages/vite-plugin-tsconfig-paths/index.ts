@@ -12,7 +12,7 @@ export type PluginOptions = Omit<RegisterOptions, "loggerID">
 export function tsConfigPaths({
 	tsConfigPath,
 	respectCoreModule,
-	logLevel = "info",
+	logLevel,
 	colors = true,
 }: PluginOptions = {}): Plugin {
 	const log = createLogger({ logLevel: convertLogLevel(logLevel), colors, ID: PLUGIN_NAME })

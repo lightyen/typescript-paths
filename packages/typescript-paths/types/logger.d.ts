@@ -7,7 +7,7 @@ export declare enum LogLevel {
 	Trace = 5,
 }
 export declare type LogLevelString = "none" | "error" | "warn" | "info" | "debug" | "trace"
-export declare function convertLogLevel(level: LogLevelString): LogLevel
+export declare function convertLogLevel(level?: LogLevelString): LogLevel | undefined
 interface Options {
 	logLevel: LogLevel
 	colors?: boolean
@@ -16,5 +16,6 @@ interface Options {
 export interface LogFunc {
 	(level: LogLevel, ...args: any[]): void
 }
+export declare function fromTYPESCRIPT_PATHS_LOG_LEVEL(): LogLevel | undefined
 export declare function createLogger({ logLevel, colors, ID }?: Partial<Options>): LogFunc
 export {}

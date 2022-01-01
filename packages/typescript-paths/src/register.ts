@@ -14,7 +14,7 @@ export interface RegisterOptions {
 export function register({
 	tsConfigPath,
 	respectCoreModule,
-	logLevel = "info",
+	logLevel,
 	colors,
 	loggerID,
 	falllback,

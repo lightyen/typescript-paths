@@ -1,7 +1,7 @@
 import { fileURLToPath, pathToFileURL } from "url"
-import { convertLogLevel, createHandler, createLogger, LogLevel } from "./index.js"
+import { createHandler, createLogger, LogLevel } from "./index.js"
 
-const log = createLogger({ logLevel: convertLogLevel(process.env["TYPESCRIPT_PATHS_LOG_LEVEL"] || "info") })
+const log = createLogger()
 const handler = createHandler({ log })
 
 /**

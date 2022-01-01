@@ -9,7 +9,7 @@ export enum LogLevel {
 
 export type LogLevelString = "none" | "error" | "warn" | "info" | "debug" | "trace"
 
-export function convertLogLevel(level: LogLevelString) {
+export function convertLogLevel(level?: LogLevelString) {
 	switch (level) {
 		case "none":
 			return LogLevel.None
@@ -23,6 +23,8 @@ export function convertLogLevel(level: LogLevelString) {
 			return LogLevel.Debug
 		case "trace":
 			return LogLevel.Trace
+		default:
+			return undefined
 	}
 }
 
@@ -43,8 +45,28 @@ const FgBlue = "\x1b[34m"
 const FgCyan = "\x1b[36m"
 const FgMagenta = "\x1b[35m"
 
+export function fromTYPESCRIPT_PATHS_LOG_LEVEL() {
+	const env = process.env["TYPESCRIPT_PATHS_LOG_LEVEL"]
+	switch (env) {
+		case "none":
+			return LogLevel.None
+		case "error":
+			return LogLevel.Error
+		case "warn":
+			return LogLevel.Warning
+		case "info":
+			return LogLevel.Info
+		case "debug":
+			return LogLevel.Debug
+		case "trace":
+			return LogLevel.Trace
+		default:
+			return undefined
+	}
+}
+
 export function createLogger({
-	logLevel = LogLevel.Info,
+	logLevel = fromTYPESCRIPT_PATHS_LOG_LEVEL() || LogLevel.Info,
 	colors = true,
 	ID = "typescript-paths",
 }: Partial<Options> = {}): LogFunc {

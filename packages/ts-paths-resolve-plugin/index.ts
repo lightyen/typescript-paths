@@ -27,7 +27,7 @@ export interface PluginOptions extends Omit<RegisterOptions, "loggerID"> {}
 export class TsPathsResolvePlugin {
 	handler: ReturnType<typeof createHandler>
 	log: LogFunc
-	constructor({ tsConfigPath, respectCoreModule, logLevel = "info", colors = true }: Partial<PluginOptions> = {}) {
+	constructor({ tsConfigPath, respectCoreModule, logLevel, colors = true }: Partial<PluginOptions> = {}) {
 		this.log = createLogger({ logLevel: convertLogLevel(logLevel), colors, ID: PLUGIN_NAME })
 		this.log(LogLevel.Debug, `typescript version: ${ts.version}`)
 		this.handler = createHandler({
