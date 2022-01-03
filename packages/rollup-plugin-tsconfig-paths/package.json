@@ -20,7 +20,7 @@
   "scripts": {
     "types": "tsc --project tsconfig.json --declaration --emitDeclarationOnly --outDir types",
     "compile": "rollup -c",
-    "format": "prettier --config ../../.prettierrc.yml --write index.ts **/{src,tests,types}/**/*",
+    "format": "prettier --config ../../.prettierrc.yml --write index.ts types/**/*",
     "build": "npm run compile && npm run types && npm run format",
     "prepare": "npm run build"
   },

@@ -100,13 +100,13 @@ importers:
 
   packages/rollup-plugin-tsconfig-paths:
     specifiers:
-      typescript-paths: ^1.2.6
+      typescript-paths: ^1.3.1
     dependencies:
       typescript-paths: link:../typescript-paths
 
   packages/ts-paths-resolve-plugin:
     specifiers:
-      typescript-paths: ^1.2.6
+      typescript-paths: ^1.3.1
       webpack: ^5
     dependencies:
       typescript-paths: link:../typescript-paths
@@ -118,7 +118,7 @@ importers:
 
   packages/vite-plugin-tsconfig-paths:
     specifiers:
-      typescript-paths: ^1.2.6
+      typescript-paths: ^1.3.1
       vite: '*'
     dependencies:
       typescript-paths: link:../typescript-paths
