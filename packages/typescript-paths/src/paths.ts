@@ -1,43 +1,8 @@
 import fs from "fs"
+import { builtinModules } from "module"
 import path from "path"
 import ts from "typescript"
 import { createLogger, LogFunc, LogLevel } from "./logger"
-
-export const coreModules = {
-	assert: "provides a set of assertion functions useful for testing",
-	buffer: "provides the ability to handle buffers containing binary data",
-	child_process: "provides the ability to spawn child processes",
-	console: "provides a simple debugging console",
-	cluster: "allows to split a Node.js process into multiple workers to take advantage of multi-core systems",
-	crypto: "provides cryptographic functionality",
-	dgram: "provides an implementation of UDP Datagram sockets",
-	dns: "provides name resolution and DNS lookups",
-	events: "provides an API for managing events",
-	fs: "provides an API for interacting with the file system",
-	http: "provides an HTTP client/server implementation",
-	http2: "provides an HTTP/2 client/server implementation",
-	https: "provides an HTTPS client/server implementation",
-	net: "provides an asynchronous network API",
-	os: "provides operating system-related utility methods and properties",
-	path: "provides utilities for working with file and directory paths",
-	perf_hooks: "to enable the collection of performance metrics",
-	process: "provides information about, and control over, the current Node.js process",
-	querystring: "provides utilities for parsing and formatting URL query strings",
-	readline: "provides an interface for reading data from a Readable stream",
-	repl: "provides a Read-Eval-Print-Loop (REPL) implementation that is available both as a standalone program or includible in other applications",
-	stream: "an abstract interface for working with streaming data",
-	string_decoder: "provides an API for decoding Buffer objects into strings",
-	timers: "provide functions to schedule functions to be called at some future period of time",
-	tls: "provides an implementation of the Transport Layer Security (TLS) and Secure Socket Layer (SSL) protocols",
-	tty: "provides functionality used to perform I/O operations in a text terminal",
-	url: "provides utilities for URL resolution and parsing",
-	util: "supports the needs of Node.js internal APIs, useful for application and module developers as well",
-	v8: "exposes APIs that are specific to the version of V8 built into the Node.js binary",
-	vm: "enables compiling and running code within V8 Virtual Machine contexts",
-	wasi: "provides an implementation of the WebAssembly System Interface specification",
-	worker: "enables the use of threads that execute JavaScript in parallel",
-	zlib: "provides compression functionality",
-}
 
 export interface Mapping {
 	pattern: string
@@ -138,13 +103,15 @@ export function createMappings({
 		}
 		const wildcard = pattern.indexOf("*")
 		if (respectCoreModule) {
-			for (const key in coreModules) {
-				if (pattern.startsWith(key)) {
+			let skip = false
+			for (const key of builtinModules) {
+				if (pattern === key || pattern.startsWith(key + "/")) {
 					log(LogLevel.Warning, `path pattern '${pattern}' is ignored.`)
-					log(LogLevel.Info, `respect core module '${key}': ${coreModules[key]}`)
-					continue
+					log(LogLevel.Info, `respect core module '${key}'.`)
+					skip = true
 				}
 			}
+			if (skip) continue
 		}
 		const targets = paths[pattern].filter(target => {
 			if (countWildcard(target) > 1) {

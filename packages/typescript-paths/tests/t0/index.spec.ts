@@ -43,7 +43,6 @@ test("support memory tsconfig", async () => {
 					"@q": ["./xx/ee.ts"],
 					"#v": ["./xx/vv.abs"],
 					"@v": ["./xx/vv.abs.ts"],
-					path: ["./xx/vv.abs.ts"],
 				},
 			},
 			fileNames: [path.resolve(__dirname, "demo.ts")],
@@ -66,5 +65,42 @@ test("support memory tsconfig", async () => {
 	expect(resolve("@q")).toEqual(path.resolve(__dirname, "xx/ee.ts"))
 	expect(resolve("#v")).toEqual(path.resolve(__dirname, "xx/vv.abs.ts"))
 	expect(resolve("@v")).toEqual(path.resolve(__dirname, "xx/vv.abs.ts"))
+})
+
+test("core module", async () => {
+	let handler = createHandler({
+		respectCoreModule: true,
+		tsConfigPath: {
+			compilerOptions: {
+				pathsBasePath: path.resolve(__dirname),
+				paths: {
+					path: ["./xx/vv.abs.ts"],
+				},
+			},
+			fileNames: [path.resolve(__dirname, "demo.ts")],
+		},
+	})
+
+	expect(handler).toBeTruthy()
+
+	let resolve = (request: string) => handler!(request, path.resolve(__dirname, "demo.ts"))
+	expect(resolve("path")).toEqual(undefined)
+
+	handler = createHandler({
+		respectCoreModule: false,
+		tsConfigPath: {
+			compilerOptions: {
+				pathsBasePath: path.resolve(__dirname),
+				paths: {
+					path: ["./xx/vv.abs.ts"],
+				},
+			},
+			fileNames: [path.resolve(__dirname, "demo.ts")],
+		},
+	})
+
+	expect(handler).toBeTruthy()
+
+	resolve = (request: string) => handler!(request, path.resolve(__dirname, "demo.ts"))
 	expect(resolve("path")).toEqual(path.resolve(__dirname, "xx/vv.abs.ts"))
 })
