@@ -6,7 +6,8 @@
     "allowSyntheticDefaultImports": true,
     "esModuleInterop": true,
     "paths": {
-      "he": ["./hello"]
+      "he": ["./hello"],
+      "ro": ["./world"],
     }
   }
 }

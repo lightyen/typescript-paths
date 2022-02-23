@@ -1,3 +1,4 @@
+import type { Resolver } from "enhanced-resolve"
 import fs from "fs"
 import ts from "typescript"
 import { convertLogLevel, createHandler, createLogger, LogFunc, LogLevel, RegisterOptions } from "typescript-paths"
@@ -15,8 +16,8 @@ interface Request {
 	descriptionFileRoot: string
 	descriptionFileData: unknown
 	relativePath: string
-	context: {
-		issuer: string
+	context?: {
+		issuer?: string
 	}
 }
 
@@ -37,35 +38,29 @@ export class TsPathsResolvePlugin {
 			falllback: moduleName => fs.existsSync(moduleName),
 		})
 	}
-	apply(compiler: Compiler) {
-		compiler.resolverFactory.hooks.resolver.for("normal").tap(PLUGIN_NAME, resolver => {
-			resolver.hooks.resolve.tapAsync(PLUGIN_NAME, (request, context, callback) => {
-				const innerRequest = request.request || request.path
-				if (!innerRequest || request.module === false) {
-					return callback()
-				}
-
-				const importer = (request as Request).context.issuer
-				if (!importer) {
-					return callback()
-				}
-
-				const moduleName = this.handler?.(innerRequest, importer)
-				if (!moduleName) {
-					return callback()
-				}
-
-				this.log(LogLevel.Debug, `${innerRequest} -> ${moduleName}`)
-
-				return resolver.doResolve(
-					resolver.hooks.resolve,
-					{ ...request, request: moduleName },
-					"",
-					context,
-					callback,
-				)
-			})
+	apply(c: Compiler | Resolver) {
+		if (this.isRsolver(c)) {
+			this.setup(c)
+			return
+		}
+		c.resolverFactory.hooks.resolver.for("normal").tap(PLUGIN_NAME, this.setup.bind(this))
+	}
+	setup(resolver: Resolver) {
+		const target = resolver.ensureHook("resolve")
+		const hook = resolver.getHook("described-resolve")
+		hook.tapAsync(PLUGIN_NAME, (request, resolveContext, callback) => {
+			const innerRequest = request.request || request.path
+			if (!innerRequest || !request.module) return callback()
+			const importer = (request as Request).context?.issuer
+			if (!importer) return callback()
+			const moduleName = this.handler?.(innerRequest, importer)
+			if (!moduleName) return callback()
+			this.log(LogLevel.Debug, `${innerRequest} -> ${moduleName}`)
+			return resolver.doResolve(target, { ...request, request: moduleName }, "", resolveContext, callback)
 		})
+	}
+	isRsolver(obj: any): obj is Resolver {
+		return typeof obj?.doResolve === "function"
 	}
 }
 
