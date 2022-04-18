@@ -29,14 +29,14 @@ export function tsConfigPaths({
 			})
 			return
 		},
-		async resolveId(request: string, importer?: string) {
+		async resolveId(request, importer, options) {
 			if (!importer || request.startsWith("\0")) {
 				return null
 			}
 
 			const moduleName = handler?.(request, importer)
 			if (!moduleName) {
-				return this.resolve(request, importer, { skipSelf: true })
+				return this.resolve(request, importer, { skipSelf: true, ...options })
 			}
 
 			log(LogLevel.Debug, `${request} -> ${moduleName}`)
