@@ -1,4 +1,5 @@
 import fs from "fs"
+import path from "path"
 import type { Plugin } from "rollup"
 import ts from "typescript"
 import type { RegisterOptions } from "typescript-paths"
@@ -40,6 +41,9 @@ export function tsConfigPaths({
 			}
 
 			log(LogLevel.Debug, `${request} -> ${moduleName}`)
+			if (!path.extname(moduleName)) {
+				return this.resolve(moduleName, importer, { skipSelf: true, ...options })
+			}
 
 			return moduleName
 		},
