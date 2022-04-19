@@ -14,8 +14,13 @@ test("resolving", async () => {
 	expect(resolve("@xxx/fff")).toEqual(path.resolve(__dirname, "abc/fff.js"))
 	expect(resolve("#m/abc")).toEqual(path.resolve(__dirname, "xyz/abc/xyz.ts"))
 	expect(resolve("#m/fff")).toEqual(path.resolve(__dirname, "abc/fff.js"))
-	const r = resolve("roll")
-	if (r) expect(require.resolve(r)).toEqual(require.resolve("rollup"))
+	expect(resolve("roll")).toEqual(
+		(function () {
+			const r = require.resolve("rollup")
+			if (/\.pnpm/.test(r)) return r.replace(/\.pnpm[/\\](?:.+)[/\\]node_modules[/\\]/, "")
+			return r
+		})(),
+	)
 	expect(resolve("./t0/abc/App")).toEqual(undefined)
 	expect(resolve("rollup")).toEqual(undefined)
 	expect(resolve("@p")).toEqual(path.resolve(__dirname, "xx/qq.ts"))
