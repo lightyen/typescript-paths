@@ -13,6 +13,7 @@
     "@rollup/plugin-babel": "5.3.0",
     "@rollup/plugin-commonjs": "21.0.1",
     "@rollup/plugin-node-resolve": "13.1.2",
+    "clsx": "1.1.1",
     "rollup": "2.62.0",
     "rollup-plugin-tsconfig-paths": "../../packages/rollup-plugin-tsconfig-paths"
   }

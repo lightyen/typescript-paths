@@ -54,6 +54,7 @@ importers:
       '@rollup/plugin-babel': 5.3.0
       '@rollup/plugin-commonjs': 21.0.1
       '@rollup/plugin-node-resolve': 13.1.2
+      clsx: 1.1.1
       rollup: 2.62.0
       rollup-plugin-tsconfig-paths: ../../packages/rollup-plugin-tsconfig-paths
     devDependencies:
@@ -65,6 +66,7 @@ importers:
       '@rollup/plugin-babel': 5.3.0_@babel+core@7.16.7+rollup@2.62.0
       '@rollup/plugin-commonjs': 21.0.1_rollup@2.62.0
       '@rollup/plugin-node-resolve': 13.1.2_rollup@2.62.0
+      clsx: 1.1.1
       rollup: 2.62.0
       rollup-plugin-tsconfig-paths: link:../../packages/rollup-plugin-tsconfig-paths
 
@@ -3701,6 +3703,11 @@ packages:
       is-plain-object: 2.0.4
       kind-of: 6.0.3
       shallow-clone: 3.0.1
+    dev: true
+
+  /clsx/1.1.1:
+    resolution: {integrity: sha512-6/bPho624p3S2pMyvP5kKBPXnI3ufHLObBFCfgx+LkeR5lg2XYy2hqZqUf45ypD8COn2bhgGJSUE+l5dhNBieA==}
+    engines: {node: '>=6'}
     dev: true
 
   /co/4.6.0:
