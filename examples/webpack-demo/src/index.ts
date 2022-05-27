@@ -1,3 +1,3 @@
 import { value } from "he"
-console.log(value)
 import "./test"
+console.log(value)

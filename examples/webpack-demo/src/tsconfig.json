@@ -7,7 +7,7 @@
     "esModuleInterop": true,
     "paths": {
       "he": ["./hello"],
-      "ro": ["./world"],
+      "ro": ["./world"]
     }
   }
 }
