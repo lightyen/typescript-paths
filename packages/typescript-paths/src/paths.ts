@@ -201,8 +201,12 @@ export function resolveModuleName({
 			case ".ts":
 			case ".tsx":
 			case ".json":
+				return moduleName
 			case ".js":
 			case ".jsx":
+				if (compilerOptions.module === ts.ModuleKind.NodeNext) {
+					break
+				}
 				return moduleName
 		}
 		const result = ts.resolveModuleName(moduleName, importer, compilerOptions, host)

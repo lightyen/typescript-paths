@@ -7,7 +7,7 @@
     "@swc/core": "^1.2.124",
     "@types/node": "*",
     "ts-node": "10.4.0",
-    "typescript": "4.5.4",
+    "typescript": "4.7.2",
     "typescript-paths": "../../packages/typescript-paths"
   }
 }

@@ -17,7 +17,7 @@ importers:
       rollup: 2.62.0
       ts-jest: 27.1.2
       ts-node: 10.4.0
-      typescript: 4.5.4
+      typescript: 4.7.2
     devDependencies:
       '@babel/core': 7.16.5
       '@babel/preset-env': 7.16.5_@babel+core@7.16.5
@@ -30,22 +30,22 @@ importers:
       jest: 27.4.5_ts-node@10.4.0
       prettier: 2.5.1
       rollup: 2.62.0
-      ts-jest: 27.1.2_epg7zkyisojtgmrbipspvlx43u
-      ts-node: 10.4.0_aate7wbvmcizzudmtbuitovobi
-      typescript: 4.5.4
+      ts-jest: 27.1.2_5icpsgoazsklz4ubwhzhw3mtsa
+      ts-node: 10.4.0_atc3igffwy6mostuccl6bibmna
+      typescript: 4.7.2
 
   examples/demo:
     specifiers:
       '@swc/core': ^1.2.124
       '@types/node': '*'
       ts-node: 10.4.0
-      typescript: 4.5.4
+      typescript: 4.7.2
       typescript-paths: ../../packages/typescript-paths
     devDependencies:
       '@swc/core': 1.2.124
       '@types/node': 16.11.17
-      ts-node: 10.4.0_lh3zupqt4opr2vspg4erbl64pi
-      typescript: 4.5.4
+      ts-node: 10.4.0_sneggxu3hhf3xwbdyb4x4a77rm
+      typescript: 4.7.2
       typescript-paths: link:../../packages/typescript-paths
 
   examples/rollup-demo:
@@ -79,6 +79,16 @@ importers:
       vite: 2.7.9
       vite-plugin-tsconfig-paths: ../../packages/vite-plugin-tsconfig-paths
     devDependencies:
+      vite: 2.7.9
+      vite-plugin-tsconfig-paths: link:../../packages/vite-plugin-tsconfig-paths
+
+  examples/vite-esm-demo:
+    specifiers:
+      typescript: 4.7.2
+      vite: 2.7.9
+      vite-plugin-tsconfig-paths: ../../packages/vite-plugin-tsconfig-paths
+    devDependencies:
+      typescript: 4.7.2
       vite: 2.7.9
       vite-plugin-tsconfig-paths: link:../../packages/vite-plugin-tsconfig-paths
 
@@ -511,6 +521,8 @@ packages:
     resolution: {integrity: sha512-sR4eaSrnM7BV7QPzGfEX5paG/6wrZM3I0HDzfIAK06ESvo9oy3xBuVBxE3MbQaKNhvg8g/ixjMWo2CGpzpHsDA==}
     engines: {node: '>=6.0.0'}
     hasBin: true
+    dependencies:
+      '@babel/types': 7.16.7
     dev: true
 
   /@babel/plugin-bugfix-safari-id-destructuring-collision-in-function-expression/7.16.7_@babel+core@7.16.5:
@@ -3514,6 +3526,8 @@ packages:
       qs: 6.9.7
       raw-body: 2.4.3
       type-is: 1.6.18
+    transitivePeerDependencies:
+      - supports-color
     dev: true
 
   /bonjour/3.5.0:
@@ -3791,6 +3805,8 @@ packages:
       on-headers: 1.0.2
       safe-buffer: 5.1.2
       vary: 1.1.2
+    transitivePeerDependencies:
+      - supports-color
     dev: true
 
   /concat-map/0.0.1:
@@ -3894,12 +3910,22 @@ packages:
 
   /debug/2.6.9:
     resolution: {integrity: sha512-bC7ElrdJaJnPbAP+1EotYvqZsb3ecl5wi6Bfi6BJTUcNowp6cvspg0jXznRTKDjm/E7AdgFBVeAPVMNcKGsHMA==}
+    peerDependencies:
+      supports-color: '*'
+    peerDependenciesMeta:
+      supports-color:
+        optional: true
     dependencies:
       ms: 2.0.0
     dev: true
 
   /debug/3.2.7:
     resolution: {integrity: sha512-CFjzYYAi4ThfiQvizrFQevTTXHtnCqWfe7x1AhgEscTz6ZbLbfoLRLPugTQyBth6f8ZERVUSyWHFD/7Wu4t1XQ==}
+    peerDependencies:
+      supports-color: '*'
+    peerDependenciesMeta:
+      supports-color:
+        optional: true
     dependencies:
       ms: 2.1.2
     dev: true
@@ -4446,6 +4472,8 @@ packages:
       type-is: 1.6.18
       utils-merge: 1.0.1
       vary: 1.1.2
+    transitivePeerDependencies:
+      - supports-color
     dev: true
 
   /fast-deep-equal/3.1.3:
@@ -4512,6 +4540,8 @@ packages:
       parseurl: 1.3.3
       statuses: 1.5.0
       unpipe: 1.0.0
+    transitivePeerDependencies:
+      - supports-color
     dev: true
 
   /find-cache-dir/3.3.2:
@@ -4725,8 +4755,6 @@ packages:
       param-case: 3.0.4
       relateurl: 0.2.7
       terser: 5.10.0
-    transitivePeerDependencies:
-      - acorn
     dev: true
 
   /html-webpack-plugin/5.5.0_webpack@5.65.0:
@@ -4741,8 +4769,6 @@ packages:
       pretty-error: 4.0.0
       tapable: 2.2.1
       webpack: 5.65.0_webpack-cli@4.9.1
-    transitivePeerDependencies:
-      - acorn
     dev: true
 
   /htmlparser2/6.1.0:
@@ -5193,7 +5219,7 @@ packages:
       micromatch: 4.0.4
       pretty-format: 27.4.2
       slash: 3.0.0
-      ts-node: 10.4.0_aate7wbvmcizzudmtbuitovobi
+      ts-node: 10.4.0_atc3igffwy6mostuccl6bibmna
     transitivePeerDependencies:
       - bufferutil
       - canvas
@@ -6106,6 +6132,8 @@ packages:
       async: 2.6.3
       debug: 3.2.7
       mkdirp: 0.5.5
+    transitivePeerDependencies:
+      - supports-color
     dev: true
 
   /postcss/8.4.5:
@@ -6472,6 +6500,8 @@ packages:
       on-finished: 2.3.0
       range-parser: 1.2.1
       statuses: 1.5.0
+    transitivePeerDependencies:
+      - supports-color
     dev: true
 
   /serialize-javascript/6.0.0:
@@ -6491,6 +6521,8 @@ packages:
       http-errors: 1.6.3
       mime-types: 2.1.34
       parseurl: 1.3.3
+    transitivePeerDependencies:
+      - supports-color
     dev: true
 
   /serve-static/1.14.2:
@@ -6501,6 +6533,8 @@ packages:
       escape-html: 1.0.3
       parseurl: 1.3.3
       send: 0.17.2
+    transitivePeerDependencies:
+      - supports-color
     dev: true
 
   /setprototypeof/1.1.0:
@@ -6723,7 +6757,7 @@ packages:
       supports-hyperlinks: 2.2.0
     dev: true
 
-  /terser-webpack-plugin/5.3.0_acorn@8.7.0+webpack@5.65.0:
+  /terser-webpack-plugin/5.3.0_webpack@5.65.0:
     resolution: {integrity: sha512-LPIisi3Ol4chwAaPP8toUJ3L4qCM1G0wao7L3qNv57Drezxj6+VEyySpPw4B1HSO2Eg/hDY/MNF5XihCAoqnsQ==}
     engines: {node: '>= 10.13.0'}
     peerDependencies:
@@ -6743,33 +6777,14 @@ packages:
       schema-utils: 3.1.1
       serialize-javascript: 6.0.0
       source-map: 0.6.1
-      terser: 5.10.0_acorn@8.7.0
+      terser: 5.10.0
       webpack: 5.65.0
-    transitivePeerDependencies:
-      - acorn
     dev: true
 
   /terser/5.10.0:
     resolution: {integrity: sha512-AMmF99DMfEDiRJfxfY5jj5wNH/bYO09cniSqhfoyxc8sFoYIgkJy86G04UoZU5VjlpnplVu0K6Tx6E9b5+DlHA==}
     engines: {node: '>=10'}
     hasBin: true
-    peerDependencies:
-      acorn: ^8.5.0
-    peerDependenciesMeta:
-      acorn:
-        optional: true
-    dependencies:
-      commander: 2.20.3
-      source-map: 0.7.3
-      source-map-support: 0.5.21
-    dev: true
-
-  /terser/5.10.0_acorn@8.7.0:
-    resolution: {integrity: sha512-AMmF99DMfEDiRJfxfY5jj5wNH/bYO09cniSqhfoyxc8sFoYIgkJy86G04UoZU5VjlpnplVu0K6Tx6E9b5+DlHA==}
-    engines: {node: '>=10'}
-    hasBin: true
-    peerDependencies:
-      acorn: ^8.5.0
     peerDependenciesMeta:
       acorn:
         optional: true
@@ -6834,7 +6849,7 @@ packages:
       punycode: 2.1.1
     dev: true
 
-  /ts-jest/27.1.2_epg7zkyisojtgmrbipspvlx43u:
+  /ts-jest/27.1.2_5icpsgoazsklz4ubwhzhw3mtsa:
     resolution: {integrity: sha512-eSOiJOWq6Hhs6Khzk5wKC5sgWIXgXqOCiIl1+3lfnearu58Hj4QpE5tUhQcA3xtZrELbcvAGCsd6HB8OsaVaTA==}
     engines: {node: ^10.13.0 || ^12.13.0 || ^14.15.0 || >=15.0.0}
     hasBin: true
@@ -6865,11 +6880,11 @@ packages:
       lodash.memoize: 4.1.2
       make-error: 1.3.6
       semver: 7.3.5
-      typescript: 4.5.4
+      typescript: 4.7.2
       yargs-parser: 20.2.9
     dev: true
 
-  /ts-node/10.4.0_aate7wbvmcizzudmtbuitovobi:
+  /ts-node/10.4.0_atc3igffwy6mostuccl6bibmna:
     resolution: {integrity: sha512-g0FlPvvCXSIO1JDF6S232P5jPYqBkRL9qly81ZgAOSU7rwI0stphCgd2kLiCrU9DjQCrJMWEqcNSjQL02s6d8A==}
     hasBin: true
     peerDependencies:
@@ -6895,11 +6910,11 @@ packages:
       create-require: 1.1.1
       diff: 4.0.2
       make-error: 1.3.6
-      typescript: 4.5.4
+      typescript: 4.7.2
       yn: 3.1.1
     dev: true
 
-  /ts-node/10.4.0_lh3zupqt4opr2vspg4erbl64pi:
+  /ts-node/10.4.0_sneggxu3hhf3xwbdyb4x4a77rm:
     resolution: {integrity: sha512-g0FlPvvCXSIO1JDF6S232P5jPYqBkRL9qly81ZgAOSU7rwI0stphCgd2kLiCrU9DjQCrJMWEqcNSjQL02s6d8A==}
     hasBin: true
     peerDependencies:
@@ -6926,7 +6941,7 @@ packages:
       create-require: 1.1.1
       diff: 4.0.2
       make-error: 1.3.6
-      typescript: 4.5.4
+      typescript: 4.7.2
       yn: 3.1.1
     dev: true
 
@@ -6965,8 +6980,8 @@ packages:
       is-typedarray: 1.0.0
     dev: true
 
-  /typescript/4.5.4:
-    resolution: {integrity: sha512-VgYs2A2QIRuGphtzFV7aQJduJ2gyfTljngLzjpfW9FoYZF6xuw1W0vW9ghCKLfcWrCFxK81CSGRAvS1pn4fIUg==}
+  /typescript/4.7.2:
+    resolution: {integrity: sha512-Mamb1iX2FDUpcTRzltPxgWMKy3fhg0TN378ylbktPGPK/99KbDtMQ4W1hwgsbPAsG3a0xKa1vmw4VKZQbkvz5A==}
     engines: {node: '>=4.2.0'}
     hasBin: true
     dev: true
@@ -7253,7 +7268,7 @@ packages:
       neo-async: 2.6.2
       schema-utils: 3.1.1
       tapable: 2.2.1
-      terser-webpack-plugin: 5.3.0_acorn@8.7.0+webpack@5.65.0
+      terser-webpack-plugin: 5.3.0_webpack@5.65.0
       watchpack: 2.3.1
       webpack-sources: 3.2.2
     transitivePeerDependencies:
@@ -7293,7 +7308,7 @@ packages:
       neo-async: 2.6.2
       schema-utils: 3.1.1
       tapable: 2.2.1
-      terser-webpack-plugin: 5.3.0_acorn@8.7.0+webpack@5.65.0
+      terser-webpack-plugin: 5.3.0_webpack@5.65.0
       watchpack: 2.3.1
       webpack-cli: 4.9.1_a2rz6htltwusyjzo22355brnni
       webpack-sources: 3.2.2
