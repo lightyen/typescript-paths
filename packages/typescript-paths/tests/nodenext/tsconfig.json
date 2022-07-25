@@ -6,6 +6,7 @@
     "esModuleInterop": true,
     "noEmit": true,
     "module": "NodeNext",
+    "moduleSuffixes": [".svg", ""],
     "moduleResolution": "node",
     "jsx": "preserve",
     "noImplicitAny": false,

@@ -1,2 +1,4 @@
-import App from "~/App.jsx"
+import App from "~/App"
+import { S } from "~/Svg.svg"
 App
+S
