@@ -43,7 +43,7 @@ export function tsConfigPaths({
 				})
 			}
 		},
-		resolveId(request: string, importer?: string) {
+		resolveId(request, importer, options) {
 			if (!importer || request.startsWith("\0")) {
 				return null
 			}
@@ -60,6 +60,7 @@ export function tsConfigPaths({
 			if (!moduleName) {
 				return this.resolve(request + suffix, importer, {
 					skipSelf: true,
+					...options,
 				})
 			}
 
