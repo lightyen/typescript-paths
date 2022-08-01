@@ -7,12 +7,12 @@ export default [
 		input: "index.ts",
 		output: [
 			{
-				file: "lib/index.js",
+				file: "lib/index.cjs",
 				format: "cjs",
-				exports: "named",
+				exports: "auto",
 			},
 			{
-				file: "lib/esm/index.js",
+				file: "lib/esm/index.mjs",
 				format: "esm",
 			},
 		],

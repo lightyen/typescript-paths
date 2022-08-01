@@ -15,7 +15,7 @@ Configurate in `webpack.config.js`:
 
 ```js
 
-const { TsPathsResolvePlugin } = require('ts-paths-resolve-plugin');
+const TsPathsResolvePlugin = require('ts-paths-resolve-plugin');
 
 module.exports = {
   resolve: {

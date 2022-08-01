@@ -1,4 +1,4 @@
 {
   "extends": "../../tsconfig",
-  "include": ["index.ts"]
+  "include": ["index.ts", "integration.test.mjs"]
 }

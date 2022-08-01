@@ -1,6 +1,6 @@
 const path = require("path")
 const glob = require("glob")
-const { TsPathsResolvePlugin } = require("ts-paths-resolve-plugin")
+const TsPathsResolvePlugin = require("ts-paths-resolve-plugin")
 const HtmlWebpackPlugin = require("html-webpack-plugin")
 const src = path.join(__dirname, "src")
 process.env.NODE_ENV = "development"

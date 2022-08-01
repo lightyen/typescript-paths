@@ -1,5 +1,5 @@
 import { defineConfig } from "vite"
-import { tsConfigPaths } from "vite-plugin-tsconfig-paths"
+import tsConfigPaths from "vite-plugin-tsconfig-paths"
 
 export default defineConfig({
 	build: {

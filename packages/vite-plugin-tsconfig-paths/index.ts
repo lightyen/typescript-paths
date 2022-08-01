@@ -9,7 +9,7 @@ const PLUGIN_NAME = "tsconfig-paths"
 
 export type PluginOptions = Omit<RegisterOptions, "loggerID">
 
-export function tsConfigPaths({
+export default function tsConfigPaths({
 	tsConfigPath,
 	respectCoreModule,
 	logLevel,
@@ -70,5 +70,3 @@ export function tsConfigPaths({
 		},
 	}
 }
-
-export default tsConfigPaths

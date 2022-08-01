@@ -9,7 +9,7 @@ Vite plugin for resolving tsconfig paths
 
 ```js
 import { defineConfig } from "vite"
-import { tsConfigPaths } from "vite-plugin-tsconfig-paths"
+import tsConfigPaths from "vite-plugin-tsconfig-paths"
 
 export default defineConfig({
 	plugins: [tsConfigPaths()],

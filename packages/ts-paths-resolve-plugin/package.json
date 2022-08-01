@@ -1,16 +1,16 @@
 {
   "name": "ts-paths-resolve-plugin",
-  "version": "5.7.0",
+  "version": "5.8.0",
   "description": "A webpack resolve plugin for tsconfig-paths",
   "license": "MIT",
   "types": "types/index.d.ts",
-  "main": "./lib/index.js",
-  "module": "./lib/esm/index.js",
+  "main": "./lib/index.cjs",
+  "module": "./lib/esm/index.mjs",
   "exports": {
     ".": {
-      "node": "./lib/index.js"
-    },
-    "./esm": "./lib/esm/index.js"
+      "require": "./lib/index.cjs",
+      "import": "./lib/esm/index.mjs"
+    }
   },
   "author": "lightyen",
   "repository": {

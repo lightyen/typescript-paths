@@ -1,16 +1,16 @@
 {
   "name": "rollup-plugin-tsconfig-paths",
-  "version": "1.2.0",
+  "version": "1.3.0",
   "description": "Rollup plugin for resolving tsconfig paths",
   "license": "MIT",
   "types": "types/index.d.ts",
-  "main": "./lib/index.js",
-  "module": "./lib/esm/index.js",
+  "main": "./lib/index.cjs",
+  "module": "./lib/esm/index.mjs",
   "exports": {
     ".": {
-      "node": "./lib/index.js"
-    },
-    "./esm": "./lib/esm/index.js"
+      "require": "./lib/index.cjs",
+      "import": "./lib/esm/index.mjs"
+    }
   },
   "author": "lightyen",
   "repository": {

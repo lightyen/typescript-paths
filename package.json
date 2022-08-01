@@ -2,7 +2,7 @@
   "name": "typescript-monorepo",
   "private": true,
   "scripts": {
-    "test": "jest",
+    "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js",
     "build-core": "cd packages/typescript-paths && npm run build",
     "build-webpack-plugin": "cd packages/ts-paths-resolve-plugin && npm run build",
     "build-rollup-plugin": "cd packages/rollup-plugin-tsconfig-paths && npm run build",

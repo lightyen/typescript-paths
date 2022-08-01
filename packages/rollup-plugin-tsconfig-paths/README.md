@@ -8,20 +8,20 @@
 Rollup plugin for resolving tsconfig paths
 
 ```sh
-yarn add -D rollup-plugin-tsconfig-paths
+npm install --save-dev rollup-plugin-tsconfig-paths
 ```
 
 rollup.config.js
 
 ```js
 
-import tsPaths from "rollup-plugin-tsconfig-paths"
+import tsConfigPaths from "rollup-plugin-tsconfig-paths"
 import nodeResolve from "@rollup/plugin-node-resolve"
 import commonjs from "@rollup/plugin-commonjs"
 
 export default {
   plugins: [
-    tsPaths(),
+    tsConfigPaths(),
     nodeResolve({ extensions: [".tsx", ".ts", ".jsx", ".js", ".json", ...] }),
     commonjs(),
   ]
