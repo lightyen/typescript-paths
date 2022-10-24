@@ -17,7 +17,9 @@ export default [
 				exclude: "node_modules/**",
 			}),
 			tsConfigPaths({ tsConfigPath: "src/tsconfig.json" }),
-			nodeResolve({ extensions: [".tsx", ".ts", ".jsx", ".js", ".json"] }),
+			nodeResolve({
+				extensions: [".tsx", ".ts", ".jsx", ".js", ".json"],
+			}),
 			commonjs(),
 		],
 	},
