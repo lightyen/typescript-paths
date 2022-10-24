@@ -1,5 +1,5 @@
-import fs from "fs"
-import path from "path"
+import fs from "node:fs"
+import path from "node:path"
 import type { Plugin } from "rollup"
 import ts from "typescript"
 import type { RegisterOptions } from "typescript-paths"
@@ -9,7 +9,7 @@ const PLUGIN_NAME = "tsconfig-paths"
 
 export type PluginOptions = Omit<RegisterOptions, "loggerID">
 
-export default function tsConfigPaths({
+export function tsConfigPaths({
 	tsConfigPath,
 	respectCoreModule,
 	logLevel,

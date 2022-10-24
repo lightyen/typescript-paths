@@ -1,9 +1,10 @@
 {
   "compilerOptions": {
+    "types": ["@types/node", "@types/jest"],
     "strict": true,
-    "isolatedModules": true,
-    "esModuleInterop": true,
+    "moduleResolution": "node",
     "noImplicitAny": false,
-    "types": ["@types/node", "@types/jest"]
+    "isolatedModules": true,
+    "esModuleInterop": true
   }
 }
