@@ -25,7 +25,7 @@ const PLUGIN_NAME = "TsPathsResolvePlugin"
 
 export interface PluginOptions extends Omit<RegisterOptions, "loggerID"> {}
 
-export default class TsPathsResolvePlugin {
+export class TsPathsResolvePlugin {
 	handler: ReturnType<typeof createHandler>
 	log: LogFunc
 	constructor({ tsConfigPath, respectCoreModule, logLevel, colors = true }: Partial<PluginOptions> = {}) {

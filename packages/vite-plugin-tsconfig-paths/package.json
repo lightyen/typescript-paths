@@ -3,13 +3,11 @@
   "version": "1.2.0",
   "description": "Vite plugin for resolving tsconfig paths",
   "license": "MIT",
-  "types": "types/index.d.ts",
-  "main": "./lib/index.cjs",
-  "module": "./lib/esm/index.mjs",
+  "types": "./index.d.ts",
   "exports": {
     ".": {
-      "require": "./lib/index.cjs",
-      "import": "./lib/esm/index.mjs"
+      "require": "./index.js",
+      "import": "./index.mjs"
     }
   },
   "author": "lightyen",
@@ -18,11 +16,11 @@
   },
   "homepage": "https://github.com/lightyen/typescript-paths/blob/main/packages/vite-plugin-tsconfig-paths#readme",
   "scripts": {
-    "types": "tsc --project tsconfig.json --declaration --emitDeclarationOnly --outDir types",
-    "compile": "rollup -c",
-    "format": "prettier --config ../../.prettierrc.yml --write index.ts types/**/*",
-    "build": "npm run compile && npm run types && npm run format",
-    "prepare": "npm run build"
+    "doit": "pnpm update --interactive --latest",
+    "compile": "del ./index.js ./index.mjs && tsup",
+    "format": "prettier --config ../../.prettierrc.yml --write *.*ts **/*.*ts",
+    "build": "npm run compile && npm run format",
+    "prepack": "npm run build"
   },
   "keywords": [
     "vite",
@@ -41,9 +39,9 @@
     "vite": "*"
   },
   "files": [
-    "lib",
-    "types",
     "LICENSE",
-    "README.md"
+    "index.js",
+    "index.mjs",
+    "index.d.ts"
   ]
 }

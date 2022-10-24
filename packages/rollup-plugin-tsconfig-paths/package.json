@@ -19,7 +19,8 @@
     "doit": "pnpm update --interactive --latest",
     "compile": "del ./index.js ./index.mjs && tsup",
     "format": "prettier --config ../../.prettierrc.yml --write *.*ts **/*.*ts",
-    "build": "npm run compile && npm run format"
+    "build": "npm run compile && npm run format",
+    "prepack": "npm run build"
   },
   "keywords": [
     "rollup",
