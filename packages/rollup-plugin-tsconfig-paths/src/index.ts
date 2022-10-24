@@ -1,2 +1,3 @@
 import { tsConfigPaths } from "./plugin"
-module.exports = { default: tsConfigPaths }
+tsConfigPaths["default"] = tsConfigPaths
+module.exports = tsConfigPaths
