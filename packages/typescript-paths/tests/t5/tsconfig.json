@@ -1,0 +1,19 @@
+{
+  "extends": "./src/com/tsconfig.json",
+  "include": ["./**/*"],
+  "compilerOptions": {
+    "allowJs": true,
+    "strict": true,
+    "isolatedModules": true,
+    "esModuleInterop": true,
+    "noEmit": true,
+    "module": "esnext",
+    "moduleResolution": "node",
+    "jsx": "preserve",
+    "noImplicitAny": false,
+    "baseUrl": "src",
+    "paths": {
+      "!/*": ["./*"]
+    }
+  }
+}

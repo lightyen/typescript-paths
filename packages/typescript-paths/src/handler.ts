@@ -46,53 +46,21 @@ export function createHandler({
 		}
 	}
 
-	const services: Service[] = []
-	if (typeof tsConfigPath === "string") {
-		tsConfigPath = [tsConfigPath]
-	} else if (!(tsConfigPath instanceof Array)) {
-		tsConfigPath = [tsConfigPath]
-	}
-
-	function addServices(config: TsConfigPayload) {
-		const { compilerOptions, fileNames, references } = config
-		if (!compilerOptions.paths || compilerOptions.paths instanceof Array) return
-		services.push({
-			compilerOptions,
-			fileNames,
-			mappings: createMappings({
-				log,
-				respectCoreModule,
-				paths: compilerOptions.paths,
-			}),
-			cache: new Map(),
-		})
-		if (references) {
-			for (const config of references) {
-				addServices(config)
-			}
-		}
-	}
-
-	for (const configPayloadOrPath of tsConfigPath) {
-		if (typeof configPayloadOrPath === "string") log(LogLevel.Trace, `loading: ${configPayloadOrPath}`)
-		const config =
-			typeof configPayloadOrPath === "string"
-				? getTsConfig({
-						tsConfigPath: configPayloadOrPath,
-						host: ts.sys,
-						log,
-				  })
-				: configPayloadOrPath
-		if (!config) return undefined
-		addServices(config)
-	}
-
 	const host: ts.ModuleResolutionHost = {
 		...ts.sys,
 		fileExists(filename) {
 			if (filename.endsWith(ts.Extension.Dts)) return false
 			return ts.sys.fileExists(filename)
 		},
+	}
+	const services: Service[] = []
+	const configs = spreadTsConfig(tsConfigPath)
+	if (!configs) {
+		// can't read tsconfig files
+		return undefined
+	}
+	for (const config of configs) {
+		addServices(config)
 	}
 
 	return (request: string, importer: string) =>
@@ -123,4 +91,76 @@ export function createHandler({
 				falllback,
 			})
 		}, undefined)
+
+	function addServices(config: TsConfigPayload) {
+		const { compilerOptions, fileNames, references } = config
+		if (!compilerOptions.paths || compilerOptions.paths instanceof Array) return
+		services.push({
+			compilerOptions,
+			fileNames,
+			mappings: createMappings({
+				log,
+				respectCoreModule,
+				paths: compilerOptions.paths,
+			}),
+			cache: new Map(),
+		})
+		if (references) {
+			for (const config of references) {
+				addServices(config)
+			}
+		}
+	}
+
+	function spreadTsConfig(
+		tsConfigPath: string | TsConfigPayload | Array<string | TsConfigPayload>,
+	): TsConfigPayload[] | undefined {
+		if (typeof tsConfigPath === "string") {
+			tsConfigPath = [tsConfigPath]
+		} else if (!(tsConfigPath instanceof Array)) {
+			tsConfigPath = [tsConfigPath]
+		}
+
+		const configs: TsConfigPayload[] = []
+		for (const configPayloadOrPath of tsConfigPath) {
+			if (typeof configPayloadOrPath === "string") {
+				log(LogLevel.Trace, `loading: ${configPayloadOrPath}`)
+			}
+			const config =
+				typeof configPayloadOrPath === "string"
+					? getTsConfig({
+							tsConfigPath: configPayloadOrPath,
+							host: ts.sys,
+							log,
+					  })
+					: configPayloadOrPath
+			if (!config) {
+				return undefined
+			}
+			configs.push(config)
+		}
+
+		// const resolvedConfigs = configs
+		// 	.map(c => {
+		// 		if (c.filePath && c.extends) {
+		// 			let tsconfigPath = path.join(path.dirname(c.filePath), c.extends)
+		// 			if (!tsconfigPath.endsWith(".json")) {
+		// 				tsconfigPath = tsconfigPath + ".json"
+		// 			}
+		// 			const exts = spreadTsConfig(tsconfigPath)
+		// 			if (exts) {
+		// 				return [c, ...exts]
+		// 			}
+		// 		}
+		// 		return c
+		// 	})
+		// 	.flat()
+		// for (const v of resolvedConfigs) {
+		// 	if (v == undefined) {
+		// 		return undefined
+		// 	}
+		// }
+
+		return configs
+	}
 }

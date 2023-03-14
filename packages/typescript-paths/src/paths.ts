@@ -13,9 +13,11 @@ export interface Mapping {
 }
 
 export interface TsConfigPayload {
+	filePath?: string
 	compilerOptions: ts.CompilerOptions
 	fileNames: string[]
 	references?: TsConfigPayload[]
+	extends?: string
 }
 
 export function getTsConfig({
@@ -45,7 +47,6 @@ export function getTsConfig({
 		fileNames,
 		projectReferences,
 	} = ts.parseJsonConfigFileContent(config, host, path.resolve(path.dirname(tsConfigPath)))
-
 	if (errors.length > 0) {
 		let hasError = false
 		for (const error of errors) {
@@ -59,7 +60,12 @@ export function getTsConfig({
 		if (hasError) return undefined
 	}
 
-	const ret: TsConfigPayload = { compilerOptions, fileNames: fileNames.map(path.normalize) }
+	const ret: TsConfigPayload = {
+		filePath: path.resolve(tsConfigPath),
+		compilerOptions,
+		fileNames: fileNames.map(path.normalize),
+		extends: config.extends,
+	}
 
 	if (projectReferences) {
 		ret.references = []

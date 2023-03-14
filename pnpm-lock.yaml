@@ -6559,8 +6559,6 @@ packages:
       param-case: 3.0.4
       relateurl: 0.2.7
       terser: 5.10.0
-    transitivePeerDependencies:
-      - acorn
     dev: true
 
   /html-webpack-plugin/5.5.0_webpack@5.65.0:
@@ -6575,8 +6573,6 @@ packages:
       pretty-error: 4.0.0
       tapable: 2.2.1
       webpack: 5.65.0_webpack-cli@4.9.1
-    transitivePeerDependencies:
-      - acorn
     dev: true
 
   /htmlparser2/6.1.0:
@@ -8951,7 +8947,7 @@ packages:
       serialize-javascript: 6.0.0
       source-map: 0.6.1
       terser: 5.10.0_acorn@8.7.0
-      webpack: 5.65.0
+      webpack: 5.65.0_webpack-cli@4.9.1
     transitivePeerDependencies:
       - acorn
     dev: true
@@ -8960,8 +8956,6 @@ packages:
     resolution: {integrity: sha512-AMmF99DMfEDiRJfxfY5jj5wNH/bYO09cniSqhfoyxc8sFoYIgkJy86G04UoZU5VjlpnplVu0K6Tx6E9b5+DlHA==}
     engines: {node: '>=10'}
     hasBin: true
-    peerDependencies:
-      acorn: ^8.5.0
     peerDependenciesMeta:
       acorn:
         optional: true
