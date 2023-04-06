@@ -1,6 +1,6 @@
 {
   "name": "rollup-plugin-tsconfig-paths",
-  "version": "1.4.0",
+  "version": "1.5.0",
   "description": "Rollup plugin for resolving tsconfig paths",
   "license": "MIT",
   "types": "./index.d.ts",
@@ -29,7 +29,7 @@
     "paths"
   ],
   "dependencies": {
-    "typescript-paths": "^1.4.0"
+    "typescript-paths": "^1.5.0"
   },
   "peerDependencies": {
     "rollup": "^2 || ^3"
