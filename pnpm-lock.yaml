@@ -164,7 +164,7 @@ importers:
   packages/ts-paths-resolve-plugin:
     dependencies:
       typescript-paths:
-        specifier: ^1.4.0
+        specifier: ^1.5.0
         version: link:../typescript-paths
     devDependencies:
       enhanced-resolve:
