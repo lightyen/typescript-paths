@@ -1,6 +1,6 @@
 {
   "name": "ts-paths-resolve-plugin",
-  "version": "5.9.0",
+  "version": "5.9.1",
   "description": "A webpack resolve plugin for tsconfig-paths",
   "license": "MIT",
   "types": "./index.d.ts",
@@ -30,7 +30,7 @@
     "webpack": "^5"
   },
   "devDependencies": {
-    "enhanced-resolve": "^5.9.0",
+    "enhanced-resolve": "^5",
     "webpack": "^5"
   },
   "keywords": [

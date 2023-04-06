@@ -6,7 +6,7 @@ export default class TsPathsResolvePlugin {
 	handler: ReturnType<typeof createHandler>
 	log: LogFunc
 	constructor({ tsConfigPath, respectCoreModule, logLevel, colors }?: Partial<PluginOptions>)
-	apply(c: Compiler | Resolver): void
+	apply(c: Compiler): void
 	setup(resolver: Resolver): void
 	isRsolver(obj: any): obj is Resolver
 }
