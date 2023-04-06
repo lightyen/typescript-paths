@@ -183,7 +183,7 @@ importers:
   packages/vite-plugin-tsconfig-paths:
     dependencies:
       typescript-paths:
-        specifier: ^1.4.0
+        specifier: ^1.5.0
         version: link:../typescript-paths
     devDependencies:
       vite:
@@ -498,7 +498,7 @@ packages:
     dependencies:
       '@babel/core': 7.16.7
       '@babel/helper-annotate-as-pure': 7.18.6
-      regexpu-core: 5.3.2
+      regexpu-core: 5.2.1
     dev: true
 
   /@babel/helper-create-regexp-features-plugin@7.19.0(@babel/core@7.19.6):
@@ -509,7 +509,7 @@ packages:
     dependencies:
       '@babel/core': 7.19.6
       '@babel/helper-annotate-as-pure': 7.18.6
-      regexpu-core: 5.3.2
+      regexpu-core: 5.2.1
     dev: true
 
   /@babel/helper-create-regexp-features-plugin@7.19.0(@babel/core@7.21.4):

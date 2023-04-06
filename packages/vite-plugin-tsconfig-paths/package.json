@@ -1,6 +1,6 @@
 {
   "name": "vite-plugin-tsconfig-paths",
-  "version": "1.2.0",
+  "version": "1.3.0",
   "description": "Vite plugin for resolving tsconfig paths",
   "license": "MIT",
   "types": "./index.d.ts",
@@ -30,7 +30,7 @@
     "paths"
   ],
   "dependencies": {
-    "typescript-paths": "^1.4.0"
+    "typescript-paths": "^1.5.0"
   },
   "devDependencies": {
     "vite": "*"
