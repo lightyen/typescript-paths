@@ -34,7 +34,7 @@
     "paths"
   ],
   "peerDependencies": {
-    "typescript": "^4.7.2"
+    "typescript": "^4.7.2 || ^5"
   },
   "files": [
     "lib",

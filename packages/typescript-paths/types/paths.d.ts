@@ -8,9 +8,11 @@ export interface Mapping {
 	targets: string[]
 }
 export interface TsConfigPayload {
+	filePath?: string
 	compilerOptions: ts.CompilerOptions
 	fileNames: string[]
 	references?: TsConfigPayload[]
+	extends?: string
 }
 export declare function getTsConfig({
 	tsConfigPath,
