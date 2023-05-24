@@ -1,9 +1,8 @@
 {
   "name": "ts-paths-resolve-plugin",
-  "version": "5.9.1",
+  "version": "5.9.2",
   "description": "A webpack resolve plugin for tsconfig-paths",
   "license": "MIT",
-  "types": "./index.d.ts",
   "exports": {
     ".": {
       "types": "./index.d.ts",
@@ -11,6 +10,7 @@
       "import": "./index.mjs"
     }
   },
+  "types": "./index.d.ts",
   "author": "lightyen",
   "repository": {
     "url": "https://github.com/lightyen/typescript-paths"
@@ -24,7 +24,7 @@
     "prepack": "npm run build"
   },
   "dependencies": {
-    "typescript-paths": "^1.5.0"
+    "typescript-paths": "^1.5.1"
   },
   "peerDependencies": {
     "webpack": "^5"

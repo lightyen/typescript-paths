@@ -1,13 +1,11 @@
 {
   "name": "typescript-paths",
-  "version": "1.5.0",
+  "version": "1.5.1",
   "description": "Resolving tsconfig paths in runtime",
   "license": "MIT",
-  "main": "./lib/index.js",
-  "module": "./lib/index.mjs",
-  "types": "types/index.d.ts",
   "exports": {
     ".": {
+      "types": "./types/index.d.ts",
       "node": "./lib/index.js"
     },
     "./register": {
@@ -16,6 +14,9 @@
     "./esm": "./lib/esm/index.js",
     "./esm/loader": "./lib/esm/loader.js"
   },
+  "types": "./types/index.d.ts",
+  "main": "./lib/index.js",
+  "module": "./lib/index.mjs",
   "author": "lightyen",
   "repository": {
     "url": "https://github.com/lightyen/typescript-paths"
