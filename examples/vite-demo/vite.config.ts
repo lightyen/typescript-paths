@@ -5,5 +5,5 @@ export default defineConfig({
 	build: {
 		outDir: "build",
 	},
-	plugins: [tsConfigPaths({ tsConfigPath: "src/tsconfig.json" })],
+	plugins: [tsConfigPaths()],
 })
