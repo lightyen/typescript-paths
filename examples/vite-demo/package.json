@@ -5,7 +5,7 @@
     "build": "vite build"
   },
   "devDependencies": {
-    "vite": "2.7.9",
+    "vite": "4.4.9",
     "vite-plugin-tsconfig-paths": "../../packages/vite-plugin-tsconfig-paths"
   }
 }

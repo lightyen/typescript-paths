@@ -5,16 +5,15 @@
     "build": "rollup -c"
   },
   "devDependencies": {
-    "@babel/core": "7.19.6",
-    "@babel/plugin-transform-runtime": "7.19.6",
-    "@babel/preset-env": "7.19.4",
-    "@babel/preset-typescript": "7.18.6",
-    "@babel/runtime": "7.19.4",
-    "@rollup/plugin-babel": "6.0.2",
-    "@rollup/plugin-commonjs": "23.0.2",
-    "@rollup/plugin-node-resolve": "15.0.1",
-    "clsx": "1.2.1",
-    "rollup": "3.2.3",
+    "@babel/core": "7.22.20",
+    "@babel/preset-env": "7.22.20",
+    "@babel/preset-typescript": "7.22.15",
+    "@babel/runtime": "7.22.15",
+    "@rollup/plugin-babel": "6.0.3",
+    "@rollup/plugin-commonjs": "25.0.4",
+    "@rollup/plugin-node-resolve": "15.2.1",
+    "clsx": "2.0.0",
+    "rollup": "3.29.2",
     "rollup-plugin-tsconfig-paths": "../../packages/rollup-plugin-tsconfig-paths"
   }
 }
