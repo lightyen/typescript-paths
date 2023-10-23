@@ -1,6 +1,6 @@
 {
   "name": "rollup-plugin-tsconfig-paths",
-  "version": "1.5.1",
+  "version": "1.5.2",
   "description": "Rollup plugin for resolving tsconfig paths",
   "license": "MIT",
   "exports": {
