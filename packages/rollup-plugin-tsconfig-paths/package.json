@@ -33,7 +33,7 @@
     "typescript-paths": "^1.5.1"
   },
   "peerDependencies": {
-    "rollup": "^2 || ^3"
+    "rollup": "^2 || ^3 || ^4"
   },
   "files": [
     "LICENSE",

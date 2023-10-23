@@ -5,6 +5,7 @@ import tsConfigPaths from "rollup-plugin-tsconfig-paths"
 
 export default [
 	{
+		logLevel: "debug",
 		input: "src/index.ts",
 		preserveEntrySignatures: "strict",
 		output: {
@@ -16,7 +17,7 @@ export default [
 				babelHelpers: "bundled",
 				exclude: "node_modules/**",
 			}),
-			tsConfigPaths({ tsConfigPath: "src/tsconfig.json" }),
+			tsConfigPaths({ logLevel: "debug", tsConfigPath: "src/tsconfig.json" }),
 			nodeResolve({
 				extensions: [".tsx", ".ts", ".jsx", ".js", ".json"],
 			}),
