@@ -47,7 +47,14 @@ export function tsConfigPaths({
 		},
 		configureServer(server) {
 			function handleChange() {
-				server.restart()
+				log(LogLevel.Debug, "build path mappings")
+				handler = createHandler({
+					log,
+					tsConfigPath,
+					respectCoreModule,
+					searchPath: root,
+					falllback: moduleName => fs.existsSync(moduleName),
+				})
 			}
 			server.watcher.on("add", handleChange)
 			server.watcher.on("unlink", handleChange)
