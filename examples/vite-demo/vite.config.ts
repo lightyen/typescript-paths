@@ -5,5 +5,5 @@ export default defineConfig({
 	build: {
 		outDir: "build",
 	},
-	plugins: [tsConfigPaths()],
+	plugins: [tsConfigPaths({ logLevel: "debug" })],
 })

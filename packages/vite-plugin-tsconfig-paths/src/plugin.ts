@@ -24,6 +24,7 @@ export function tsConfigPaths({
 		enforce: "pre",
 		configResolved(config) {
 			root = config.root
+			log(LogLevel.Debug, "build path mappings")
 			handler = createHandler({
 				log,
 				tsConfigPath,
@@ -34,6 +35,7 @@ export function tsConfigPaths({
 		},
 		handleHotUpdate(ctx) {
 			if (ctx.file.endsWith(".json")) {
+				log(LogLevel.Debug, "build path mappings")
 				handler = createHandler({
 					log,
 					tsConfigPath,
@@ -42,6 +44,13 @@ export function tsConfigPaths({
 					falllback: moduleName => fs.existsSync(moduleName),
 				})
 			}
+		},
+		configureServer(server) {
+			function handleChange() {
+				server.restart()
+			}
+			server.watcher.on("add", handleChange)
+			server.watcher.on("unlink", handleChange)
 		},
 		resolveId(request, importer, options) {
 			if (!importer || request.startsWith("\0")) {
