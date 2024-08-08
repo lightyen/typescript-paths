@@ -1,19 +1,20 @@
 {
-  "name": "rollup-demo",
-  "private": true,
+  "type": "module",
   "scripts": {
-    "build": "rollup -c"
+    "dev": "rollup -c"
   },
   "devDependencies": {
-    "@babel/core": "7.22.20",
-    "@babel/preset-env": "7.22.20",
-    "@babel/preset-typescript": "7.22.15",
-    "@babel/runtime": "7.22.15",
+    "@babel/core": "7.25.2",
+    "@babel/preset-env": "7.25.3",
+    "@babel/preset-typescript": "7.24.7",
+    "@babel/runtime": "7.25.0",
     "@rollup/plugin-babel": "6.0.4",
-    "@rollup/plugin-commonjs": "25.0.7",
+    "@rollup/plugin-commonjs": "26.0.1",
     "@rollup/plugin-node-resolve": "15.2.3",
-    "clsx": "2.0.0",
-    "rollup": "4.1.4",
+    "@rollup/plugin-run": "3.1.0",
+    "clsx": "2.1.1",
+    "prettier": "3.3.3",
+    "rollup": "4.20.0",
     "rollup-plugin-tsconfig-paths": "../../packages/rollup-plugin-tsconfig-paths"
   }
 }

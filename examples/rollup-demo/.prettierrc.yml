@@ -1,0 +1,11 @@
+endOfLine: lf
+printWidth: 120
+overrides:
+  - files: "**/!(*.json|*.yaml|*.yml|.babelrc|.prettierrc)"
+    options:
+      useTabs: true
+      semi: false
+      singleQuote: false
+      jsxSingleQuote: false
+      arrowParens: avoid
+      trailingComma: all
