@@ -75,11 +75,15 @@ export function createHandler({
 				cache.set(importer, exist)
 				if (!exist) return undefined
 			} else if (fileNames.indexOf(importer) === -1) {
-				if (cache.size === 1 << 8) cache.delete(cache.keys().next().value)
+				if (cache.size === 256) {
+					cache.delete(cache.keys().next().value!)
+				}
 				cache.set(importer, false)
 				return undefined
 			} else {
-				if (cache.size === 1 << 8) cache.delete(cache.keys().next().value)
+				if (cache.size === 256) {
+					cache.delete(cache.keys().next().value!)
+				}
 				cache.set(importer, true)
 			}
 			return resolveModuleName({
