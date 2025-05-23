@@ -29,7 +29,7 @@ export function getTsConfig({
 	log?: LogFunc
 	host?: ts.ParseConfigHost
 }): undefined | TsConfigPayload {
-	const { error, config } = ts.readConfigFile(tsConfigPath, host.readFile)
+	const { error, config = {} } = ts.readConfigFile(tsConfigPath, host.readFile)
 	if (error) {
 		let hasError = false
 		switch (error.category) {
@@ -38,15 +38,41 @@ export function getTsConfig({
 				hasError = true
 				break
 		}
-		if (hasError) return undefined
+		if (hasError) {
+			return undefined
+		}
 	}
+
+	const configDir = path.resolve(path.dirname(tsConfigPath))
+
+	function replaceConfigDir(s?: string): string
+	function replaceConfigDir(s?: string[]): string[]
+	function replaceConfigDir(s?: string | string[]) {
+		if (typeof s === "string") {
+			return s.replace(/\$\{configDir\}/g, configDir)
+		}
+		if (Array.isArray(s)) {
+			const arr = s.slice()
+			for (const i in arr) {
+				if (typeof arr[i] === "string") {
+					arr[i] = arr[i].replace(/\$\{configDir\}/g, configDir)
+				}
+			}
+			return arr
+		}
+		return s
+	}
+
+	config.files = replaceConfigDir(config.files)
+	config.include = replaceConfigDir(config.include)
+	config.exclude = replaceConfigDir(config.exclude)
 
 	let {
 		options: compilerOptions,
 		errors,
 		fileNames,
 		projectReferences,
-	} = ts.parseJsonConfigFileContent(config, host, path.resolve(path.dirname(tsConfigPath)))
+	} = ts.parseJsonConfigFileContent(config, host, configDir)
 	if (errors.length > 0) {
 		let hasError = false
 		for (const error of errors) {
@@ -58,6 +84,18 @@ export function getTsConfig({
 			}
 		}
 		if (hasError) return undefined
+	}
+
+	// compilerOptions.outDir = replaceConfigDir(compilerOptions.outDir)
+	// compilerOptions.declarationDir = replaceConfigDir(compilerOptions.declarationDir)
+	// compilerOptions.outFile = replaceConfigDir(compilerOptions.outFile)
+	// compilerOptions.tsBuildInfoFile = replaceConfigDir(compilerOptions.tsBuildInfoFile)
+	// compilerOptions.typeRoots = replaceConfigDir(compilerOptions.typeRoots)
+	compilerOptions.rootDir = replaceConfigDir(compilerOptions.rootDir)
+	compilerOptions.baseUrl = replaceConfigDir(compilerOptions.baseUrl)
+	compilerOptions.rootDirs = replaceConfigDir(compilerOptions.rootDirs)
+	for (const k in compilerOptions.paths) {
+		compilerOptions.paths[k] = replaceConfigDir(compilerOptions.paths[k])
 	}
 
 	const ret: TsConfigPayload = {
