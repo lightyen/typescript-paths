@@ -6,7 +6,7 @@ export declare enum LogLevel {
 	Debug = 4,
 	Trace = 5,
 }
-export declare type LogLevelString = "none" | "error" | "warn" | "info" | "debug" | "trace"
+export type LogLevelString = "none" | "error" | "warn" | "info" | "debug" | "trace"
 export declare function convertLogLevel(level?: LogLevelString): LogLevel | undefined
 interface Options {
 	logLevel: LogLevel
